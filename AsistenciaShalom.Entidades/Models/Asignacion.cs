@@ -21,7 +21,6 @@ namespace AsistenciaShalom.Entidades.Models
         public string FormaIngreso { get; set; }
         public string Cargo { get; set; }
 
-        public bool? IsSelected { get; set; }
         public bool? Estado { get; set; }
         public string UsuarioCreacion { get; set; }
         public DateTime? FechaCreacion { get; set; }

@@ -84,8 +84,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                                IdAsignacion = a.IdAsignacion,
                                IdPersona = a.IdPersona,
                                NombresPersona = p.Nombres,
-                               ApellidosPersona = p.Apellidos,
-                               IsSelected = a.IsSelected.GetValueOrDefault()
+                               ApellidosPersona = p.Apellidos
+                               
                            };
 
             return lista.AsEnumerable();

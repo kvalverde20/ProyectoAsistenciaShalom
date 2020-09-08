@@ -30,7 +30,6 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         [Required(ErrorMessage = "El Cargo es obligatorio")]
         public string Cargo { get; set; }
 
-        public bool? IsSelected { get; set; }
         public bool? Estado { get; set; }
         public string UsuarioCreacion { get; set; }
         public DateTime? FechaCreacion { get; set; }
