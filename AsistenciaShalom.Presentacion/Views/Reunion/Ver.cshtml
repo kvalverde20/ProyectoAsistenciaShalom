@@ -1,0 +1,133 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@model ReunionDto
+
+@{
+    ViewData["Title"] = "Detalle de asistencias a la Reunión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Menu"] = "Control";
+    ViewData["Controlador"] = "Reunion";
+}
+
+<form asp-controller="Reunion" asp-action="Ver" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+                <div class="input-group">
+
+                    <a asp-controller="Reunion" asp-action="Index" class="btn btn-danger">
+                        <span class="btn-label">
+                            <i class="fas fa-arrow-alt-circle-left"></i>
+                        </span>
+                        Regresar
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+                <input type="hidden" id="hdnIdReunion" name="hdnIdReunion" value="@ViewBag.IdReunion" />
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <span class="h3"><strong>Fecha de Reunión :</strong></span>
+                        <span class="h3">@Html.DisplayFor(model => model.FechaReunionTexto)</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <span class="h3"><strong>Tipo de Reunión :</strong></span>
+                        <span class="h3">@Html.DisplayFor(model => model.TipoReunion)</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <span class="h3"><strong>Tema de Formación :</strong></span>
+                        <span class="h3">@Html.DisplayFor(model => model.TemaFormacion)</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <span class="h3"><strong>Predicador :</strong></span>
+                        <span class="h3">@Html.DisplayFor(model => model.Predicador)</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <span class="h3"><strong>Rhema de la oración :</strong></span>
+                        <span class="h3">@Html.DisplayFor(model => model.RhemaOracion)</span>
+                    </div>
+                </div>
+
+            </div>
+            <br /><br />
+
+            <div class="table-responsive">
+                <table id="table" width="100%" class="display table table-bordered table-striped table-hover blueTable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">IdAsistencia</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th style="text-align:center">Asistencia</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbDatos">
+                        @for (int i = 0; i < Model.ListaAsistencias.Count; i++)
+                        {
+                            <tr>
+                                <td style="display:none">
+                                    @*@Html.HiddenFor(x => Model.ListaAsistencias[i].IdAsistencia)*@
+                                    @Model.ListaAsistencias[i].IdAsistencia
+                                </td>
+                                <td>
+                                    @*@Html.HiddenFor(x => Model.ListaAsistencias[i].NombresPersona)*@
+                                    @Model.ListaAsistencias[i].NombresPersona
+                                </td>
+                                <td>
+                                    @*@Html.HiddenFor(x => Model.ListaAsistencias[i].ApellidosPersona)*@
+                                    @Model.ListaAsistencias[i].ApellidosPersona
+                                </td>
+
+                                @if (@Model.ListaAsistencias[i].FlagAsistencia)
+                                {
+                                    <td style="text-align:center"><span class="badge badge-success">Asistió</span></td>
+                                }
+                                else
+                                {
+                                    <td style="text-align:center"><span class="badge badge-danger">Faltó</span></td>
+                                }
+
+                                <td>
+                                    @Model.ListaAsistencias[i].Comentario
+                                    @*<input name="Comentario" value="@Model.ListaAsistencias[i].Comentario" class="table-control" maxlength="50" />*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+    <script src="~/assets/js/controladores/reunion.js"></script>
+
+ 
+
+}

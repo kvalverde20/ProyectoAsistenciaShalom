@@ -1,0 +1,107 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model IEnumerable<PersonaDto>
+@{
+    ViewData["Title"] = "Listado de Personas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "Persona";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-tools pull-left">
+            <h4 class="card-title">@ViewData["Title"] </h4>
+
+        </div>
+        <div class="card-tools pull-right">
+            <div class="input-group">
+                <a class="btn btn-primary" asp-action="Agregar" asp-controller="Persona">
+                    <span class="btn-label">
+                        <i class="fa fa-plus-circle"></i>
+                    </span>
+                    Nuevo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <form asp-controller="Persona" id="frmEnviar">
+
+            <div class="table-responsive">
+                <table id="table" width="100%" class="display table table-bordered table-striped table-hover blueTable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">@Html.DisplayNameFor(model => model.IdPersona)</th>
+                            <th>@Html.DisplayNameFor(model => model.Nombres)</th>
+                            <th>@Html.DisplayNameFor(model => model.Apellidos)</th>
+                            <th>@Html.DisplayNameFor(model => model.PaisOrigen)</th>
+                            <th>@Html.DisplayNameFor(model => model.MinisterioTexto)</th>
+                            <th>@Html.DisplayNameFor(model => model.ComunidadTexto)</th>
+                            <th>@Html.DisplayNameFor(model => model.NombreCompletoAcompanador)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbDatos">
+                    </tbody>
+
+                </table>
+            </div>
+
+            @*<div id="loading">
+                <div id="loadingcontent">
+                    <p id="loadingspinner">
+                        Cargando...
+                    </p>
+                </div>
+            </div>*@
+        </form>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    @*<script src="~/assets/js/spin.js"></script>*@
+
+    <script>
+
+        window.onload = function () {
+
+            var url = "Persona/listarPersonas";
+            pintar(url, ["idPersona", "nombres", "apellidos", "paisOrigen", "ministerioTexto",
+                                    "comunidadTexto","nombreCompletoAcompanador" ],
+                        "idPersona", "Persona");
+        }       
+
+        function Eliminar(id) {
+
+            //document.getElementById("hdnIdPersona").value = id;
+            mostrarModalConfirmacion("Eliminar Persona", "¿Está seguro de eliminar a esta persona?").then(res => {
+
+                if (res.value) {
+                    $.get("Persona/Eliminar/?id=" + id, function (rpta) {
+
+                        if (rpta) {
+                            correcto("La persona se eliminó correctamente");
+                            var frmEnviar = document.getElementById("frmEnviar");
+                            frmEnviar.submit();
+                        } else {
+                            error("Ocurrió un error al eliminar");
+                        }
+                    })
+                }
+            })
+        }
+
+    </script>
+
+    
+}

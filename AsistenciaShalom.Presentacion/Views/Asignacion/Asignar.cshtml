@@ -1,0 +1,172 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@using AsistenciaShalom.Utilitarios
+@model AsignacionDto
+
+@{
+    ViewData["Title"] = "Registrar asignación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Administracion";
+    ViewData["Controlador"] = "Asignacion";
+
+    List<SelectListItem> ListaGrupos = ViewBag.ListaGrupos;
+    List<SelectListItem> listaCargos = ViewBag.listaCargos;
+}
+
+<form asp-controller="Asignacion" asp-action="Asignar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <input type="hidden" id="hdnIdPersona" class="form form-control" asp-for="IdPersona" />
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+
+                        <label asp-for="NombresCompleto"></label>
+                        <input id="txtNombreCompleto" asp-for="NombresCompleto" class="form form-control" maxlength="50" disabled />
+                        <input type="hidden" id="hdnNombreCompleto" class="form form-control" asp-for="NombresCompleto" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Edad"></label>
+                        <input id="txtEdad" asp-for="Edad" class="form form-control" disabled />
+                        <input type="hidden" id="hdnEdad" class="form form-control" asp-for="Edad" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="MinisterioTexto"></label>
+                        <input id="txtMinisterio" asp-for="MinisterioTexto" class="form form-control" disabled />
+                        <input type="hidden" id="hdnMinisterio" class="form form-control" asp-for="MinisterioTexto" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="ComunidadTexto"></label>
+                        <input id="txtEdad" asp-for="ComunidadTexto" class="form form-control" disabled />
+                        <input type="hidden" id="hdnComunidad" class="form form-control" asp-for="ComunidadTexto" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdGrupo"></label>
+                        @Html.DropDownList("IdGrupo", ListaGrupos, new { @id = "ddlGrupo", @class = "form form-control" })
+
+                        <span asp-validation-for="IdGrupo" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="FechaIngreso"></label>
+                        <input id="txtFecIngreso" asp-for="FechaIngreso" class="form form-control" />
+                        <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="FormaIngreso"></label>
+                        <input id="txtFormaIngreso" asp-for="FormaIngreso" class="form form-control" />
+                        <span asp-validation-for="FormaIngreso" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Cargo"></label>
+                        @Html.DropDownList("Cargo", listaCargos, new { @id = "ddlCargo", @class = "form form-control" })
+                        <span asp-validation-for="Cargo" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="Asignacion" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+
+    <script>
+
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            var idPersona = $('#hdnIdPersona').val();
+            //var nombrecompleto = $('#txtNombreCompleto').val();
+            //var edad = $('#txtEdad').val();
+            var idGrupo = $('#ddlGrupo option:selected').val();
+            var fechaIngreso = $('#txtFecIngreso').val();
+            var formaIngreso = $('#txtFormaIngreso').val();
+            var idcargo = $('#ddlCargo option:selected').val();
+
+            var frm = new FormData();
+            frm.append("IdPersona", idPersona)
+            //frm.append("NombresCompleto", nombrecompleto)
+            //frm.append("Edad", edad)
+            frm.append("IdGrupo", idGrupo)
+            frm.append("FechaIngreso", fechaIngreso);
+            frm.append("FormaIngreso", formaIngreso)
+            frm.append("Cargo", idcargo);
+
+
+            $.ajax({
+                type: 'POST',
+                url: "/Asignacion/Asignar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("La asignación ha sido registrada exitosamente");
+                        window.location.href = "/Asignacion";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        //$('#txtNombreCompleto').val(nombrecompleto);
+                        //$('#txtEdad').val(edad);
+                        frmEnviar.submit();
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}

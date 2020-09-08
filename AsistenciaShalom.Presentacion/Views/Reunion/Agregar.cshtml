@@ -1,0 +1,144 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@model ReunionDto
+@{
+    ViewData["Title"] = "Nueva Reunión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Control";
+    ViewData["Controlador"] = "Reunion";
+    List<SelectListItem> listaGrupo = ViewBag.listaGrupo;
+}
+
+<form asp-controller="Reunion" asp-action="Agregar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label>Grupo</label>
+                            @Html.DropDownList("IdGrupo", listaGrupo, new { @id = "ddlGrupo", @class = "form form-control" })
+                        </div>
+                    </div>*@
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="FechaReunion"></label>
+                        <input id="txtFechaReunion" asp-for="FechaReunion" class="form form-control" />
+                        <span asp-validation-for="FechaReunion" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="TipoReunion"></label>
+                        <input id="txtTipoReunion" asp-for="TipoReunion" class="form form-control" maxlength="50" />
+                        <span asp-validation-for="TipoReunion" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="TemaFormacion"></label>
+                        <input id="txtTemaFormacion" asp-for="TemaFormacion" class="form form-control" maxlength="100" />
+                        <span asp-validation-for="TemaFormacion" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Predicador"></label>
+                        <input id="txtPredicador" asp-for="Predicador" class="form form-control" maxlength="100" />
+                        <span asp-validation-for="Predicador" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="RhemaOracion"></label>
+                        <textarea id="txtRhemaOracion" asp-for="RhemaOracion" class="form form-control" rows="4" maxlength="500">
+                        </textarea>
+                        <span asp-validation-for="RhemaOracion" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="Reunion" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+   
+
+    <script>
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            var fechareunion = $('#txtFechaReunion').val();
+            var tiporeunion = $('#txtTipoReunion').val();
+            var temaformacion = $('#txtTemaFormacion').val();
+            var rhemaoracion = $('#txtRhemaOracion').val();
+            var predicador = $('#txtPredicador').val();
+
+            var frm = new FormData();
+
+            frm.append("FechaReunion", fechareunion);
+            frm.append("TipoReunion", tiporeunion);
+            frm.append("TemaFormacion", temaformacion);
+            frm.append("RhemaOracion", rhemaoracion);
+            frm.append("Predicador", predicador);
+
+            $.ajax({
+                type: 'POST',
+                url: "/Reunion/Agregar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("La Reunión se ha registrado exitosamente");
+                        window.location.href = "/Reunion";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        frmEnviar.submit();
+                        //toastr.error(data.message);
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}
+

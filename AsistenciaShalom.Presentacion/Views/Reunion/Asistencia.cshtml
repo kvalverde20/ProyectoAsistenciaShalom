@@ -1,0 +1,127 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@model List<AsistenciaDto>
+@{
+    ViewData["Title"] = "Registrar Asistencia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Control";
+    ViewData["Controlador"] = "Reunion";
+}
+
+<form asp-controller="Reunion" asp-action="GuardarAsistencia" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+                <input type="hidden" id="hdnIdReunion" name="hdnIdReunion" value="@ViewBag.IdReunion" />
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Fecha de Reunión</label>
+                        <p class="text-primary">@ViewBag.FechaReunion</p>
+                    </div>
+                </div>
+
+            </div>
+            <br /><br />
+
+            <div class="table-responsive">
+                <table id="table"   width="100%" class="display table table-bordered table-striped table-hover blueTable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">IdAsistencia</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th style="text-align:center">Asistencia</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbDatos">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                        <tr>
+
+                            <td style="display:none">
+                                <input type="hidden"  value="@Model[i].IdAsistencia" />
+                                @Model[i].IdAsistencia
+                            </td>
+                            <td>
+                                @Model[i].NombresPersona
+                            </td>
+                            <td>
+                                @Model[i].ApellidosPersona
+                            </td>
+                            <td style="text-align:center">
+                                @*<input type="checkbox" name="IdAsistencia" value="@Model[i].IdAsistencia" class="checkAsistencia form-radio-input" />*@
+                                <input type="checkbox" name="FlagAsistencia-@Model[i].IdAsistencia" value="false" class="checkAsistencia form-radio-input" />
+                            </td>
+                            <td>
+                                <input  name="Comentario-@Model[i].IdAsistencia" value="@Model[i].Comentario" class="table-control txtComentario"  maxlength="50" />
+                                
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    @*<input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />*@
+                    <button type="submit"  class="btn btn-primary" id="btnGuardar"  asp-controller="Reunion" asp-action="GuardarAsistencia">
+                        Guardar
+                    </button>
+                    <a asp-controller="Reunion" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+    <script src="~/assets/js/controladores/reunion.js"></script>
+
+    <script>
+
+        $('#table input[type=checkbox]').on('change', function () {
+
+            $(this).val(this.checked ? true : false);
+            var valor = $(this).val();
+            var padre = $(this).parent().parent().find('td').eq(4);
+            var elemento = padre.children();
+
+            if (valor == "true") {
+                elemento.prop('disabled', true);
+                elemento.addClass('deshabilitado');
+                
+            } else {
+                elemento.prop('disabled', false);
+                elemento.removeClass('deshabilitado');
+            }
+
+        });
+
+
+    </script>
+
+}

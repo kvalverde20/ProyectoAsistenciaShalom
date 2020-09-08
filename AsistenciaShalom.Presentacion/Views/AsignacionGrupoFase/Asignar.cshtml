@@ -1,0 +1,139 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model GrupoFaseDto
+
+@{
+    ViewData["Title"] = "Registrar Asignación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Administracion";
+    ViewData["Controlador"] = "AsignacionGrupoFase";
+    List<SelectListItem> listaFases = ViewBag.listaFases;
+}
+
+<form asp-controller="AsignacionGrupoFase" asp-action="Asignar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <input type="hidden" id="hdnIdGrupo" class="form form-control" asp-for="IdGrupo" />
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Nombre de Grupo</label>
+                        <input id="txtNombreGrupo" asp-for="Grupo.Nombre" class="form form-control" disabled />
+                        <input type="hidden" id="hdnNombreGrupo" class="form form-control" asp-for="Grupo.Nombre" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Día de Reunión</label>
+                        <input id="txtDiaReunion" asp-for="Grupo.DiaReunion" class="form form-control" disabled />
+                        <input type="hidden" id="hdnDiaReunion" class="form form-control" asp-for="Grupo.DiaReunion" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Horario</label>
+                        <input id="txtHorario" asp-for="Grupo.Horario" class="form form-control" disabled />
+                        <input type="hidden" id="hdnDiaReunion" class="form form-control" asp-for="Grupo.Horario" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Tipo de Grupo</label>
+                        <input id="txtTipoGrupo" asp-for="Grupo.TipoGrupoTexto" class="form form-control" disabled />
+                        <input type="hidden" id="hdnTipoGrupo" class="form form-control" asp-for="Grupo.TipoGrupoTexto" />
+                    </div>
+                </div>
+
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Fase</label>
+                        @Html.DropDownList("IdFase", listaFases, new { @id = "ddlFase", @class = "form form-control" })
+                        <span asp-validation-for="IdFase" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Fecha de inicio</label>
+                        <input id="txtFechaInicio" asp-for="FechaInicio" class="form form-control" />
+                        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="AsignacionGrupoFase" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+
+    <script>
+
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            var idGrupo = $('#hdnIdGrupo').val();
+            var idFase = $('#ddlFase option:selected').val();
+            var fechaInicio = $('#txtFechaInicio').val();
+
+            var frm = new FormData();
+            frm.append("IdGrupo", idGrupo)
+            frm.append("IdFase", idFase)
+            frm.append("FechaInicio", fechaInicio);
+
+            $.ajax({
+                type: 'POST',
+                url: "/AsignacionGrupoFase/Asignar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("La asignación ha sido registrada exitosamente");
+                        window.location.href = "/AsignacionGrupoFase";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        frmEnviar.submit();
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}

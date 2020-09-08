@@ -1,0 +1,99 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+
+@model GrupoDto
+@{
+    ViewData["Title"] = "Agregar Grupo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "Grupo";
+
+    List<SelectListItem> listaTipoGrupo = ViewBag.listaTipoGrupo;
+}
+
+    <form asp-controller="Persona" asp-action="Agregar" method="post" id="frmEnviar">
+        <div class="card">
+
+            <div class="card-header">
+                <div class="card-tools pull-left">
+                    <h4 class="card-title">@ViewData["Title"] </h4>
+                </div>
+
+                <div class="card-tools pull-right">
+
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="Nombre"></label>
+                            <input id="txtNombre" asp-for="Nombre" class="form form-control" maxlength="50" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="Descripcion"></label>
+                            <input id="txtDescripcion" asp-for="Descripcion" class="form form-control" maxlength="150" />
+                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="FechaInicio"></label>
+                            <input id="txtFechaInicio" asp-for="FechaInicio" class="form form-control" />
+                            <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="FechaFin"></label>
+                            <input id="txtFechaFin" asp-for="FechaFin" class="form form-control" />
+                            <span asp-validation-for="FechaFin" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="DiaReunion"></label>
+                            <input id="txtDiaReunion" asp-for="DiaReunion" class="form form-control" maxlength="20"/>
+                            <span asp-validation-for="DiaReunion" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="Horario"></label>
+                            <input id="txtFechaInicio" asp-for="Horario" class="form form-control" maxlength="20"/>
+                            <span asp-validation-for="Horario" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="TipoGrupo"></label>
+                            @Html.DropDownList("TipoGrupo", listaTipoGrupo, new { @id = "ddlTipoGrupo", @class = "form form-control" })
+                            <span asp-validation-for="TipoGrupo" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-action">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                        <a asp-controller="Grupo" asp-action="Index" class="btn btn-danger">Regresar</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+

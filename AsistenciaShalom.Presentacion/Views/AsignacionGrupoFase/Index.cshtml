@@ -1,0 +1,75 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model IEnumerable<GrupoDto>
+@{
+    ViewData["Title"] = "Administrar Asignaciones de Fase a Grupo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Administracion";
+    ViewData["Controlador"] = "AsignacionGrupoFase";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-tools pull-left">
+            <h4 class="card-title">@ViewData["Title"] </h4>
+        </div>
+        @*<div class="card-tools pull-right">
+            <div class="input-group">
+                <a class="btn btn-primary" asp-action="Agregar" asp-controller="Grupo">
+                    <span class="btn-label">
+                        <i class="fa fa-plus-circle"></i>
+                    </span>
+                    Nuevo
+                </a>
+            </div>
+        </div>*@
+    </div>
+
+    <div class="card-body">
+
+        <form asp-controller="AsignacionGrupoFase" id="frmEnviar">
+
+            <div class="table-responsive">
+                <table id="table" width="100%" class="display table table-bordered table-striped table-hover blueTable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">@Html.DisplayNameFor(model => model.IdGrupo)</th>
+                            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                            <th>@Html.DisplayNameFor(model => model.FechaInicioTexto)</th>
+                            @*<th>@Html.DisplayNameFor(model => model.FechaFinTexto)</th>*@
+                            <th>@Html.DisplayNameFor(model => model.DiaReunion)</th>
+                            <th>@Html.DisplayNameFor(model => model.Horario)</th>
+                            <th>@Html.DisplayNameFor(model => model.TipoGrupoTexto)</th>
+                            <th style="text-align:center">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbDatos">
+                    </tbody>
+
+                </table>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script src="~/assets/js/controladores/asignaciongrupofase.js"></script>
+    <script>
+
+        window.onload = function () {
+
+            var url = "AsignacionGrupoFase/ListarGruposActivos";  //  controller/Metodo
+            pintarTableAsigGrupoFase(url, ["idGrupo", "nombre", "fechaInicioTexto", "diaReunion", "horario", "tipoGrupoTexto"],
+                "idGrupo", "AsignacionGrupoFase");
+        }
+
+
+    </script>
+
+}

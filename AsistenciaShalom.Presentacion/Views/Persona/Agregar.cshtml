@@ -1,0 +1,250 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@using AsistenciaShalom.Utilitarios
+@model PersonaDto
+
+@{
+    ViewData["Title"] = "Nueva Persona";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "Persona";
+
+    List<SelectListItem> listaMinisterios = ViewBag.listaMinisterios;
+    List<SelectListItem> listaComunidades = ViewBag.listaComunidades;
+    List<SelectListItem> listaEstCivil = ViewBag.listaEstCivil;
+}
+
+<form asp-controller="Persona" asp-action="Agregar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            @*<form asp-action="Agregar" method="post" id="frmEnviar">*@
+
+            <div class="row">
+
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>Tipo documento</label>
+                <select id="ddlTipoDocumento" class="form-control" asp-for="TipoDocumento" asp-items="Html.GetEnumSelectList<TipoDocumento>()">
+                    <option selected="selected" value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="TipoDocumento" class="text-danger"></span>
+            </div>
+        </div>*@
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Nombres"></label>
+                        <input id="txtNombres" asp-for="Nombres" class="form form-control" maxlength="50" />
+                        <span asp-validation-for="Nombres" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Apellidos"></label>
+                        <input id="txtApellidos" asp-for="Apellidos" class="form form-control" maxlength="80" />
+                        <span asp-validation-for="Apellidos" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>País de origen</label>
+                        <input id="txtPaisOrigen" asp-for="PaisOrigen" class="form form-control" maxlength="50" />
+                        <span asp-validation-for="PaisOrigen" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Estado Civil</label>
+                        @Html.DropDownList("EstadoCivil", listaEstCivil, new { @id = "ddlEstadoCivil", @class = "form form-control" })
+                        <span asp-validation-for="EstadoCivil" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Fecha nacimiento</label>
+                        <input id="txtFecNacimiento" asp-for="FecNacimiento" class="form form-control" />
+                        <span asp-validation-for="FecNacimiento" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Correo"></label>
+                        <input id="txtCorreo" type="email" asp-for="Correo" class="form form-control" />
+                        <span asp-validation-for="Correo" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Telefono"></label>
+                        <input id="txtTelefono" asp-for="Telefono" class="form form-control" maxlength="20" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Direccion"></label>
+                        <input id="txtDireccion" asp-for="Direccion" class="form form-control" maxlength="150" />
+                        <span asp-validation-for="Direccion" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="NumeroHijos"></label>
+                        <input id="txtNumeroHijos" asp-for="NumeroHijos" class="form form-control" type="number" />
+                        <span asp-validation-for="NumeroHijos" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="NombreCompletoResponsable"></label>
+                        <input id="txtNombreCompletoResponsable" asp-for="NombreCompletoResponsable" class="form form-control" maxlength="100" />
+                        <span asp-validation-for="NombreCompletoResponsable" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="TelefonoResponsable"></label>
+                        <input id="txtTelefonoResponsable" asp-for="TelefonoResponsable" class="form form-control" maxlength="20" />
+                        <span asp-validation-for="TelefonoResponsable" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdMinisterio"></label>
+                        @Html.DropDownList("IdMinisterio", listaMinisterios, new { @id = "ddlMinisterio", @class = "form form-control" })
+                        <span asp-validation-for="IdMinisterio" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdComunidad"></label>
+                        @Html.DropDownList("IdComunidad", listaComunidades, new { @id = "ddlComunidad", @class = "form form-control" })
+                        <span asp-validation-for="IdComunidad" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="NombreCompletoAcompanador"></label>
+                        <input id="txtNombreCompletoAcompanador" asp-for="NombreCompletoAcompanador" class="form form-control" maxlength="100" />
+                        <span asp-validation-for="NombreCompletoAcompanador" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="chkEstado" class="form-check-input" asp-for="Estado" type="checkbox" value="">
+                            <span class="form-check-sign">Activo</span>
+                            <span asp-validation-for="Estado" class="checkbox-danger"></span>
+                        </label>
+                    </div>
+                </div>*@
+
+            </div>
+            @*</form>*@
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="Persona" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+
+@section Scripts {
+
+
+    <script>
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            //var codigo = $('#txtCodigo').val();
+            var nombres = $('#txtNombres').val();
+            var apellidos = $('#txtApellidos').val();
+            var paisorigen =  $('#txtPaisOrigen').val();
+            var estadocivil = $('#ddlEstadoCivil option:selected').val();
+            var fechaNacimiento = $('#txtFecNacimiento').val();
+            var correo =  $('#txtCorreo').val();
+            var telefono = $('#txtTelefono').val();
+            var direccion = $('#txtDireccion').val();
+            var numHijos = $('#txtNumeroHijos').val();
+            var nombreResponsable = $('#txtNombreCompletoResponsable').val();
+            var telefonoResponsable = $('#txtTelefonoResponsable').val();
+            var nombreAcompanador = $('#txtNombreCompletoAcompanador').val();
+            var comunidad = $('#ddlComunidad option:selected').val();
+            var ministerio = $('#ddlMinisterio option:selected').val();
+
+            var frm = new FormData();
+            //frm.append("Codigo", codigo);
+            frm.append("Nombres", nombres);
+            frm.append("Apellidos", apellidos);
+            frm.append("PaisOrigen", paisorigen);
+            frm.append("EstadoCivil", estadocivil);
+            frm.append("FecNacimiento", fechaNacimiento);
+            frm.append("Correo", correo);
+            frm.append("Telefono", telefono);
+            frm.append("Direccion", direccion);
+            frm.append("NumeroHijos", numHijos);
+            frm.append("NombreCompletoResponsable", nombreResponsable);
+            frm.append("TelefonoResponsable", telefonoResponsable);
+            frm.append("NombreCompletoAcompanador", nombreAcompanador);
+            frm.append("IdComunidad", comunidad);
+            frm.append("IdMinisterio", ministerio);
+
+            $.ajax({
+                type: 'POST',
+                url: "/Persona/Agregar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("La persona se ha registrado exitosamente");
+                        window.location.href = "/Persona";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        frmEnviar.submit();
+                        //toastr.error(data.message);
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}
+
