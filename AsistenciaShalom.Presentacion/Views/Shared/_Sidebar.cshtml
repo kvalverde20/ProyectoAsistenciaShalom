@@ -131,6 +131,23 @@
                                         </li>
                                     }
 
+                                    @if (ViewData["Controlador"].ToString() == "Usuario")
+                                    {
+                                        <li class="nav-li active">
+                                            <a asp-controller="Usuario" asp-action="Index">
+                                                <span class="sub-item">Usuarios</span>
+                                            </a>
+                                        </li>
+                                    }
+                                                else
+                                                {   
+                                                    <li class="nav-li">
+                                                        <a asp-controller="Usuario" asp-action="Index">
+                                                            <span class="sub-item">Usuarios</span>
+                                                        </a>
+                                                    </li>
+                                                }
+
 
                                 </ul>
                             </div>
@@ -164,6 +181,11 @@
                                     <li class="nav-li">
                                         <a asp-controller="GrupoFase" asp-action="Index">
                                             <span class="sub-item">Fases por Grupo</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-li">
+                                        <a asp-controller="Usuario" asp-action="Index">
+                                            <span class="sub-item">Usuarios</span>
                                         </a>
                                     </li>
                                 </ul>

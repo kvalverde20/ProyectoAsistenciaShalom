@@ -27,5 +27,13 @@ namespace AsistenciaShalom.AccesoDatos.Data
         public virtual DbSet<Persona> Persona { get; set; }
         public virtual DbSet<Reunion> Reunion { get; set; }
 
+
+        public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Rol> Rol { get; set; }
+        public virtual DbSet<UsuarioRol> UsuarioRol { get; set; }
+        public virtual DbSet<Pagina> Pagina { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<PaginaUsuarioRol> PaginaUsuarioRol { get; set; }
+
     }
 }

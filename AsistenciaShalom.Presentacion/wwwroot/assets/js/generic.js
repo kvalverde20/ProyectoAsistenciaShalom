@@ -157,7 +157,7 @@ function pintar(url, campos, propiedadId, nombreController,
 					<td>
 						<div class="form-button-action"> `  
 							
-							contenido += `  <a  data-toggle="tooltip" class="btn btn-link btn-danger" data-original-title="Eliminar"
+							contenido += `  <a  data-toggle="tooltip" class="btn btn-link btn-lg btn-danger" data-original-title="Eliminar"
 												onclick="Eliminar(${objetoActual[propiedadId]})">
 												<i class="fa fa-times"></i>
 												</a>`															
@@ -166,7 +166,7 @@ function pintar(url, campos, propiedadId, nombreController,
 						
 							<a  
 							   href="${nombreController}/Editar/${objetoActual[propiedadId]}" data-toggle="tooltip"
-								class="btn btn-link btn-primary" data-original-title="Editar" 
+								class="btn btn-link btn-lg btn-primary" data-original-title="Editar" 
 							  >
 									<i class="fa fa-edit aria-hidden="true"></i>	
 							</a>
@@ -200,8 +200,12 @@ function pintar(url, campos, propiedadId, nombreController,
 		}
 
 
-		tbody.innerHTML = contenido;
+		// tbody.innerHTML = contenido;
 		if (idTabla == null || idTabla == undefined || idTabla == "") {
+
+			$('#table').DataTable().clear();
+			$('#table').DataTable().destroy();
+			tbody.innerHTML = contenido;
 			$('#table').DataTable(
 				{
 					"order": [[0, "desc"]],
@@ -228,6 +232,10 @@ function pintar(url, campos, propiedadId, nombreController,
 				}
 			);
 		} else {
+
+			$('#' + idTabla).DataTable().clear();
+			$('#' + idTabla).DataTable().destroy();
+			tbody.innerHTML = contenido;
 			$('#' + idTabla).DataTable(
 				{
 					"order": [[0, "desc"]],

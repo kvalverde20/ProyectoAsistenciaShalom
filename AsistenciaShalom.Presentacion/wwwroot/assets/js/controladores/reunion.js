@@ -75,8 +75,12 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 			contenido += "</tr>";
 		}
 
-		tbody.innerHTML = contenido;
+		//tbody.innerHTML = contenido;
 		if (idTabla == null || idTabla == undefined || idTabla == "") {
+
+			$('#table').DataTable().clear();
+			$('#table').DataTable().destroy();
+			tbody.innerHTML = contenido;
 			$('#table').DataTable(
 				{
 					"order": [[0, "desc"]],
@@ -99,9 +103,14 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 							"previous": "Anterior"
 						}
 					}
+
 				}
 			);
 		} else {
+
+			$('#' + idTabla).DataTable().clear();
+			$('#' + idTabla).DataTable().destroy();
+			tbody.innerHTML = contenido;
 			$('#' + idTabla).DataTable(
 				{
 					"order": [[0, "desc"]],

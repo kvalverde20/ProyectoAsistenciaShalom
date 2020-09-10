@@ -25,6 +25,9 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             GrupoFase = new GrupoFaseRepositorio(_db);
             Asistencia = new AsistenciaRepositorio(_db);
             Fase = new FaseRepositorio(_db);
+            Usuario = new UsuarioRepositorio(_db);
+            UsuarioRol = new UsuarioRolRepositorio(_db);
+            Rol = new RolRepositorio(_db);
         }
 
         public IPersonaRepositorio Persona { get; private set; }
@@ -37,6 +40,9 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
         public IGrupoFaseRepositorio GrupoFase { get; private set; }
         public IAsistenciaRepositorio Asistencia { get; private set; }
         public IFaseRepositorio Fase { get; private set; }
+        public IUsuarioRepositorio Usuario { get; private set; }
+        public IUsuarioRolRepositorio UsuarioRol { get; private set; }
+        public IRolRepositorio Rol { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

@@ -1,0 +1,100 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model IEnumerable<UsuarioRolDto>
+@{
+    ViewData["Title"] = "Listado de Usuarios del Sistema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "Usuario";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-tools pull-left">
+            <h4 class="card-title">@ViewData["Title"] </h4>
+
+        </div>
+        <div class="card-tools pull-right">
+            <div class="input-group">
+                <a class="btn btn-primary" asp-action="Agregar" asp-controller="Usuario">
+                    <span class="btn-label">
+                        <i class="fas fa-user-plus"></i>
+                    </span>
+                    Nuevo Usuario
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <form asp-controller="Usuario" id="frmEnviar">
+
+            <div class="table-responsive">
+                <table id="table" width="100%" class="display table table-bordered table-striped table-hover blueTable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">@Html.DisplayNameFor(model => model.IdUsuarioRol)</th>
+                            <th>@Html.DisplayNameFor(model => model.Username)</th>
+                            <th>@Html.DisplayNameFor(model => model.NombrePersona)</th>
+                            <th>@Html.DisplayNameFor(model => model.ApellidosPersona)</th>
+                            <th>@Html.DisplayNameFor(model => model.NombreRol)</th>
+                            <th style="text-align:center">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbDatos">
+                    </tbody>
+
+                </table>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+
+    <script src="~/assets/js/controladores/usuario.js"></script>
+
+    <script>
+
+        window.onload = function () {
+
+            var url = "Usuario/ListarUsuarios";
+            pintarTablaUsuarios(url, ["idUsuarioRol", "username", "nombrePersona", "apellidosPersona", "nombreRol"],
+                "idUsuarioRol", "Usuario");
+        }
+
+
+        function Eliminar(id) {
+
+            mostrarModalConfirmacion("Eliminar Usuario", "¿Está seguro de eliminar a este Usuario?").then(res => {
+
+                if (res.value) {
+                    $.get("Usuario/Eliminar/?id=" + id, function (rpta) {
+
+                        if (rpta) {
+
+                            pintarTablaUsuarios("Usuario/ListarUsuarios", ["idUsuarioRol", "username", "nombrePersona", "apellidosPersona", "nombreRol"],
+                                                    "idUsuarioRol", "Usuario");
+                            correcto("El Usuario se eliminó correctamente");
+
+                        } else {
+                            error("Ocurrió un error al eliminar");
+                        }
+                    })
+                }
+            })
+        }
+
+
+    </script>
+
+
+}
+

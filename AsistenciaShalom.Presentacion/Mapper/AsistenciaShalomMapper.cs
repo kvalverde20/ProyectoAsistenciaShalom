@@ -22,6 +22,10 @@ namespace AsistenciaShalom.Presentacion.Mapper
             CreateMap<Grupofase, GrupoFaseDto>().ReverseMap();
             CreateMap<Asistencia, AsistenciaDto>().ReverseMap();
             CreateMap<Fase, FaseDto>().ReverseMap();
+
+            CreateMap<Usuario, UsuarioDto>().ReverseMap();
+            CreateMap<UsuarioRol, UsuarioRolDto>().ReverseMap();
+            CreateMap<Rol, RolDto>().ReverseMap();
         }
     }
 }

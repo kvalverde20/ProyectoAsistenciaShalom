@@ -110,5 +110,23 @@ namespace AsistenciaShalom.Presentacion.Generic
             return lista;
         }
 
+        public List<SelectListItem> CargarComboRolesEntidad()
+        {
+            var lista = new List<SelectListItem>();
+
+            var listEnt = _contenedorTrabajo.Rol.GetAll().ToList();
+            var listDtos = _mapper.Map<List<RolDto>>(listEnt);
+
+            lista = (from m in listDtos
+                     select new SelectListItem
+                     {
+                         Text = m.Nombre,
+                         Value = m.IdRol.ToString()
+                     }).ToList();
+
+            lista.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
+            return lista;
+        }
+
     }
 }

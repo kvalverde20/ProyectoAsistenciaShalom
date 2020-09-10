@@ -83,16 +83,19 @@
 
         function Eliminar(id) {
 
-            //document.getElementById("hdnIdPersona").value = id;
             mostrarModalConfirmacion("Eliminar Persona", "¿Está seguro de eliminar a esta persona?").then(res => {
 
                 if (res.value) {
                     $.get("Persona/Eliminar/?id=" + id, function (rpta) {
 
                         if (rpta) {
+
+                            pintar("Persona/listarPersonas", ["idPersona", "nombres", "apellidos", "paisOrigen", "ministerioTexto",
+                                            "comunidadTexto", "nombreCompletoAcompanador"],
+                                            "idPersona", "Persona");
                             correcto("La persona se eliminó correctamente");
-                            var frmEnviar = document.getElementById("frmEnviar");
-                            frmEnviar.submit();
+                            //var frmEnviar = document.getElementById("frmEnviar");
+                            //frmEnviar.submit();
                         } else {
                             error("Ocurrió un error al eliminar");
                         }

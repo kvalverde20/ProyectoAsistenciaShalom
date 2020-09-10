@@ -1,0 +1,154 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model UsuarioRolDto
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "Usuario";
+    List<SelectListItem> listaRoles = ViewBag.listaRoles;
+}
+
+<form asp-controller="Usuario" asp-action="Editar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <input type="hidden" id="hdnIdUsuario" asp-for="IdUsuarioRol" />
+                <input type="hidden" id="hdnIdPersona" asp-for="IdPersona" />
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="NombreCompleto"></label>
+                        <input id="txtNombreCompleto" asp-for="NombreCompleto" class="form form-control" disabled />
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Username"></label>
+                        <input id="txtUsername" asp-for="Username" class="form form-control" disabled />
+                        <input type="hidden" id="hdnUsername" class="form form-control" asp-for="Username" />
+
+                    </div>
+                </div>
+
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label asp-for="Contrasena"></label>
+                <input id="txtContrasena" asp-for="Contrasena" class="form form-control" maxlength="20" />
+                <span asp-validation-for="Contrasena" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label asp-for="ContrasenaRepetida"></label>
+                <input id="txtRepetirContrasena" asp-for="ContrasenaRepetida" class="form form-control" maxlength="20" />
+                <span asp-validation-for="ContrasenaRepetida" class="text-danger"></span>
+            </div>
+        </div>*@
+
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdRol"></label>
+                        @Html.DropDownList("IdRol", listaRoles, new { @id = "ddlRoles", @class = "form form-control" })
+                        <span asp-validation-for="IdRol" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="Usuario" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+    <script src="~/assets/js/controladores/usuario.js"></script>
+
+
+    <script>
+
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            var idusuarioRol = $('#hdnIdUsuario').val();
+            var idpersona = $('#hdnIdPersona').val();       
+            var username = $('#hdnUsername').val();  
+            var contrasena = $('#txtContrasena').val();
+            var contrasenarepetida = $('#txtRepetirContrasena').val();
+            var idrol = $('#ddlRoles option:selected').val();
+            
+            var frm = new FormData();
+            frm.append("IdUsuarioRol", idusuarioRol);
+            frm.append("IdPersona", idpersona);
+            frm.append("Username", username);
+            frm.append("Contrasena", contrasena);
+            frm.append("ContrasenaRepetida", contrasenarepetida);
+            frm.append("IdRol", idrol);
+
+            //if (contrasena   != contrasenarepetida) {
+            //    error("La contraseña debe ser la misma");
+            //    return;
+            //}
+
+            $.ajax({
+                type: 'POST',
+                url: "/Usuario/Editar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("El Usuario ha sido actualizado exitosamente");
+                        window.location.href = "/Usuario";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        frmEnviar.submit();
+                        //toastr.error(data.message);
+                        //$("#log").append("<div>El Username ya existe! </div>");
+
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}
+
+

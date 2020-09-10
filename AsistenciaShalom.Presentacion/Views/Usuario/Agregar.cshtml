@@ -1,0 +1,156 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model UsuarioRolDto
+@{
+    ViewData["Title"] = "Registrar Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "Usuario";
+    List<SelectListItem> listaRoles = ViewBag.listaRoles;
+}
+
+<form asp-controller="Usuario" asp-action="Agregar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <input type="hidden" id="hdnIdUsuario" asp-for="IdUsuarioRol" />
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdPersona"></label>
+                        <input id="txtIdPersona" asp-for="IdPersona" class="form form-control" maxlength="100" />
+                        <span asp-validation-for="IdPersona" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Username"></label>
+                        <input id="txtUsername" asp-for="Username" class="form form-control" maxlength="20" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                        <div id="log"></div>
+                        @*@if ( Model.mensajeError != "" || Model.mensajeError != null)
+        {
+            <p class="text-danger">El Username ya existe</p>
+        }*@
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Contrasena"></label>
+                        <input id="txtContrasena" asp-for="Contrasena" class="form form-control" maxlength="20" />
+                        <span asp-validation-for="Contrasena" class="text-danger"></span>
+                        @*<input type="hidden" id="hdnContrasena" asp-for="Contrasena" />*@
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="ContrasenaRepetida"></label>
+                        <input  id="txtRepetirContrasena" asp-for="ContrasenaRepetida" class="form form-control" maxlength="20" />
+                        <span asp-validation-for="ContrasenaRepetida" class="text-danger"></span>
+                        @*<input type="hidden" id="hdnContrasenaRep" asp-for="ContrasenaRepetida" />*@
+                    </div>
+                </div>
+
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdRol"></label>
+                        @Html.DropDownList("IdRol", listaRoles, new { @id = "ddlRoles", @class = "form form-control" })
+                        <span asp-validation-for="IdRol" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="Usuario" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+
+    <script>
+
+        //$("#txtUsername").mouseover(function () {
+        //    $("#log").append("<div>Handler for .mouseover() called.</div>");
+        //});
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            var idpersona = $('#txtIdPersona').val();
+            var username = $('#txtUsername').val();
+            var contrasena = $('#txtContrasena').val();
+            var idrol = $('#ddlRoles option:selected').val();
+            var contrasenarepetida = $('#txtRepetirContrasena').val();
+
+            var frm = new FormData();
+            frm.append("IdPersona", idpersona);
+            frm.append("Username", username);
+            frm.append("Contrasena", contrasena);
+            frm.append("ContrasenaRepetida", contrasenarepetida);
+            frm.append("IdRol", idrol);
+
+            if (contrasena   != contrasenarepetida) {
+                error("La contraseña debe ser la misma");
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "/Usuario/Agregar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("El Usuario se ha registrado exitosamente");
+                        window.location.href = "/Usuario";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        frmEnviar.submit();
+                        //toastr.error(data.message);
+                        //$("#log").append("<div>El Username ya existe! </div>");
+
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}
+

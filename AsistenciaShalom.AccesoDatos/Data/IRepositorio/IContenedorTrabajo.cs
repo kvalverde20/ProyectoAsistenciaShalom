@@ -16,6 +16,9 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         IGrupoFaseRepositorio GrupoFase { get; }
         IAsistenciaRepositorio Asistencia { get; }
         IFaseRepositorio Fase { get; }
+        IUsuarioRepositorio Usuario { get; }
+        IUsuarioRolRepositorio UsuarioRol { get; }
+        IRolRepositorio Rol { get; }
         void Save();
     }
 }
