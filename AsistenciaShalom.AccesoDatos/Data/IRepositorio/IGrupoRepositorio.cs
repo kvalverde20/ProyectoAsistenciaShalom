@@ -11,6 +11,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         IEnumerable<GrupoDto> GetGruposActivos();
         GrupoDto GetGrupoPorId(int idGrupo);
         void Update(Grupo grupo);
+        void LogicalDelete(int id);
 
     }
 }

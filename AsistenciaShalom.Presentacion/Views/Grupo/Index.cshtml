@@ -50,13 +50,22 @@
 
                 </table>
             </div>
+
+            <div id="loading">
+                <div id="loadingcontent">
+                    <p id="loadingspinner">
+                        Cargando...
+                    </p>
+                </div>
+            </div>
+
         </form>
 
-        <form asp-action="Eliminar" asp-controller="Persona"
+        @*<form asp-action="Eliminar" asp-controller="Persona"
               method="post" id="frmEnviarEliminar">
 
             <input type="hidden" id="txtIdEspecialidad" name="iidespecialidad" />
-        </form>
+        </form>*@
 
     </div>
 </div>
@@ -76,32 +85,24 @@
         }
 
 
-        function Eliminar(idEspecialidad) {
+        function Eliminar(id) {
 
-            document.getElementById("txtIdEspecialidad").value = idEspecialidad;
-            mostrarModal().then(res => {
+            //document.getElementById("hdnIdPersona").value = id;
+            mostrarModalConfirmacion("Eliminar Grupo", "¿Está seguro de eliminar este grupo?").then(res => {
+
                 if (res.value) {
-                    //var frmEnviarEliminar = document.getElementById("frmEnviarEliminar");
-                    //frmEnviarEliminar.submit();
-                    $.get("Especialidad/Eliminar/?iidespecialidad=" + idEspecialidad, function (rpta) {
+                    $.get("Grupo/Eliminar/?id=" + id, function (rpta) {
 
-                        if (rpta == 1) {
-                            correcto("Se eliminó correctamente la especialidad");
-                            pintar("Especialidad/listarEspecialidad",
-                                ["iidespecialidad", "nombre", "descripcion"],
-                                "iidespecialidad", "Especialidad");
-
+                        if (rpta) {
+                            correcto("El grupo se eliminó correctamente");
                             var frmEnviar = document.getElementById("frmEnviar");
                             frmEnviar.submit();
-
                         } else {
-                            error("Ocurrio un error al eliminar");
+                            error("Ocurrió un error al eliminar");
                         }
                     })
                 }
-
             })
-
         }
 
     </script>

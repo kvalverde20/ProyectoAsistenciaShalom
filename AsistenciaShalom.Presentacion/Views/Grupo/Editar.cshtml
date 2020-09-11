@@ -2,7 +2,7 @@
 
 @model GrupoDto
 @{
-    ViewData["Title"] = "Agregar Grupo";
+    ViewData["Title"] = "Editar Grupo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     ViewData["Menu"] = "Mantenimiento";
@@ -11,7 +11,7 @@
     List<SelectListItem> listaTipoGrupo = ViewBag.listaTipoGrupo;
 }
 
-<form asp-controller="Persona" asp-action="Agregar" method="post" id="frmEnviar">
+<form asp-controller="Grupo" asp-action="Editar" method="post" id="frmEnviar">
     <div class="card">
 
         <div class="card-header">
@@ -27,6 +27,9 @@
         <div class="card-body">
 
             <div class="row">
+
+                <input type="hidden" id="hdnIdGrupo" class="form form-control" asp-for="IdGrupo" />
+
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
@@ -51,6 +54,8 @@
                         <span asp-validation-for="FechaInicio" class="text-danger"></span>
                     </div>
                 </div>
+
+
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label asp-for="FechaFin"></label>
@@ -81,6 +86,7 @@
                     </div>
                 </div>
 
+
             </div>
         </div>
 
@@ -107,6 +113,7 @@
 
             var frmEnviar = document.getElementById("frmEnviar");
 
+            var idGrupo = $('#hdnIdGrupo').val();
             var nombre = $('#txtNombre').val();
             var descripcion = $('#txtDescripcion').val();
             var fechaInicio = $('#txtFechaInicio').val();
@@ -117,7 +124,7 @@
 
 
             var frm = new FormData();
-
+            frm.append("IdGrupo", idGrupo)
             frm.append("nombre", nombre);
             frm.append("descripcion", descripcion);
             frm.append("fechaInicio", fechaInicio);
@@ -125,10 +132,12 @@
             frm.append("diaReunion", diaReunion);
             frm.append("horario", horario);
             frm.append("tipoGrupo", tipoGrupo);
+       
+
 
             $.ajax({
                 type: 'POST',
-                url: "/Grupo/Agregar",
+                url: "/Grupo/Editar",
                 data: frm,
                 contentType: false,
                 processData: false,
@@ -136,7 +145,7 @@
                  {
                         if (data.success)
                         {
-                            correcto("El grupo se ha registrado exitosamente");
+                            correcto("Los datos del grupo han sido actualizados exitosamente");
                             window.location.href = "/Grupo";
                         }
                         else

@@ -75,9 +75,19 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             objDesdeDb.Nombre = grupo.Nombre;
             objDesdeDb.Descripcion = grupo.Descripcion;
             objDesdeDb.FechaInicio = grupo.FechaInicio;
+            objDesdeDb.FechaFin = grupo.FechaFin;
             objDesdeDb.DiaReunion = grupo.DiaReunion;
+            objDesdeDb.TipoGrupo = grupo.TipoGrupo;
             objDesdeDb.Horario = grupo.Horario;
-            objDesdeDb.Estado = grupo.Estado;
+            objDesdeDb.Estado = true;
+            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.FechaActualizacion = DateTime.Now;
+        }
+
+        public void LogicalDelete(int id)
+        {
+            var objDesdeDb = _db.Grupo.FirstOrDefault(s => s.IdGrupo == id);
+            objDesdeDb.Estado = false;
         }
 
     }

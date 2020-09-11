@@ -16,9 +16,13 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         [Display(Name = "Descripción")]
         public string Descripcion { get; set; }
 
+        [DataType(DataType.Date, ErrorMessage = "El formato de fecha no es correcto")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha Inicio")]
         public DateTime? FechaInicio { get; set; }
 
+        [DataType(DataType.Date, ErrorMessage = "El formato de fecha no es correcto")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha Fin")]
         public DateTime? FechaFin { get; set; }
 
