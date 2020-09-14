@@ -1,0 +1,109 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto;
+@model IEnumerable<AsignacionDto>
+
+@{
+    ViewData["Title"] = "Listado Persona Grupo de Oración";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "PersonaGrupo";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-tools pull-left">
+            <h4 class="card-title">@ViewData["Title"] </h4>
+
+        </div>
+        <div class="card-tools pull-right">
+            <div class="input-group">
+                @*<a class="btn btn-primary" asp-action="Agregar" asp-controller="Asignacion">
+                        <span class="btn-label">
+                            <i class="fa fa-plus-circle"></i>
+                        </span>
+                        Nuevo
+                    </a>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <form asp-controller="PersonaGrupo" id="frmEnviar">
+
+            <div class="table-responsive">
+                <table id="table" width="100%" class="display table table-bordered table-striped table-hover blueTable">
+                    <thead>
+                        <tr>
+                            <th style="display:none">@Html.DisplayNameFor(model => model.IdAsignacion)</th>
+                            @*<th>@Html.DisplayNameFor(model => model.IdTipoDocumento)</th>
+                                <th>@Html.DisplayNameFor(model => model.NumDocumento)</th>*@
+                            <th>@Html.DisplayNameFor(model => model.NombresCompleto)</th>
+                            <th>@Html.DisplayNameFor(model => model.NombreGrupo)</th>
+                            <th>@Html.DisplayNameFor(model => model.FechaIngresoTexto)</th>
+                            <th>@Html.DisplayNameFor(model => model.FechaSalidaTexto)</th>
+                            <th>@Html.DisplayNameFor(model => model.FormaIngreso)</th>
+                            <th>@Html.DisplayNameFor(model => model.CargoTexto)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbDatos">
+                    </tbody>
+
+                </table>
+            </div>
+        </form>
+
+        @*<form asp-action="Eliminar" asp-controller="Persona" method="post" id="frmEnviarEliminar">
+
+                <input type="hidden" id="hdnIdPersona" name="IdPersona" />
+            </form>*@
+
+    </div>
+</div>
+
+
+
+@*<script src="~/assets/js/sweetalert.js"></script>
+    <script src="~/assets/js/generic.js"></script>*@
+
+@section Scripts {
+
+    <script>
+
+        window.onload = function () {
+
+            var url = "PersonaGrupo/ListarPersonaGrupoTotal";
+            pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "fechaSalidaTexto", "formaIngreso","cargoTexto"],
+                "idAsignacion", "PersonaGrupo");
+            //pintarTableAsignaciones(url, ["idPersona", "nombres", "apellidos", "paisOrigen", "fechaNacimientoTexto", "ministerioTexto","comunidadTexto"],
+            //    "idPersona", "Asignacion");
+
+        }
+
+        function Eliminar(id) {
+
+            mostrarModalConfirmacion("Eliminar Persona en Grupo", "¿Está seguro de eliminar a esta persona en ese Grupo?").then(res => {
+
+                if (res.value) {
+                    $.get("PersonaGrupo/Eliminar/?id=" + id, function (rpta) {
+
+                        if (rpta) {
+
+                            var url = "PersonaGrupo/ListarPersonaGrupoTotal";
+                            pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "fechaSalidaTexto", "formaIngreso", "cargoTexto"],
+                                "idAsignacion", "PersonaGrupo");
+                            correcto("La persona se eliminó correctamente");
+                            //var frmEnviar = document.getElementById("frmEnviar");
+                            //frmEnviar.submit();
+                        } else {
+                            error("Ocurrió un error al eliminar");
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}

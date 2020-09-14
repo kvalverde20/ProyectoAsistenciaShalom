@@ -1,0 +1,154 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@using AsistenciaShalom.Utilitarios
+@model AsignacionDto
+
+@{
+    ViewData["Title"] = "Editar asignación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Mantenimiento";
+    ViewData["Controlador"] = "PersonaGrupo";
+
+    List<SelectListItem> ListaGrupos = ViewBag.ListaGrupos;
+    List<SelectListItem> listaCargos = ViewBag.listaCargos;
+}
+
+<form asp-controller="PersonaGrupo" asp-action="Editar" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+
+            <div class="card-tools pull-right">
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <input type="hidden" id="hdnIdAsignacion" class="form form-control" asp-for="IdAsignacion" />
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+
+                        <label asp-for="NombresCompleto"></label>
+                        <input id="txtNombreCompleto" asp-for="NombresCompleto" class="form form-control" maxlength="50" disabled />
+                        <input type="hidden" id="hdnNombreCompleto" class="form form-control" asp-for="NombresCompleto" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="IdGrupo"></label>
+                       @Html.DropDownList("IdGrupo", ListaGrupos, new { @id = "ddlGrupo", @class = "form form-control" })
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="FechaIngreso"></label>
+                        <input id="txtFechaIngreso" asp-for="FechaIngreso" class="form form-control" />
+                        <input type="hidden" id="hdnFechaIngreso" class="form form-control" asp-for="FechaIngreso" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="FechaSalida"></label>
+                        <input id="txtFechaSalida" asp-for="FechaSalida" class="form form-control" />
+                        <input type="hidden" id="hdnFechaSalida" class="form form-control" asp-for="FechaSalida" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="FormaIngreso"></label>
+                        <input id="txtFormaIngreso" asp-for="FormaIngreso" class="form form-control" />
+                        <span asp-validation-for="FormaIngreso" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="Cargo"></label>
+                        @Html.DropDownList("Cargo", listaCargos, new { @id = "ddlCargo", @class = "form form-control" })
+                        <span asp-validation-for="Cargo" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="card-action">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" id="btnGuardar" value="Guardar" />
+                    <a asp-controller="PersonaGrupo" asp-action="Index" class="btn btn-danger">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts {
+
+
+    <script>
+
+
+        $('#btnGuardar').click(function () {
+
+            var frmEnviar = document.getElementById("frmEnviar");
+
+            var idAsignacion = $('#hdnIdAsignacion').val();
+            var idGrupo = $('#ddlGrupo option:selected').val();
+            var fechaIngreso = $('#txtFechaIngreso').val();
+            var fechaSalida = $('#txtFechaSalida').val();
+            var formaIngreso = $('#txtFormaIngreso').val();
+            var idcargo = $('#ddlCargo option:selected').val();
+
+
+            var frm = new FormData();
+            frm.append("idAsignacion", idAsignacion)
+            frm.append("IdGrupo", idGrupo)
+            frm.append("fechaIngreso", fechaIngreso);
+            frm.append("fechaSalida", fechaSalida);
+            frm.append("formaIngreso", formaIngreso);
+            frm.append("cargo", idcargo);
+
+
+            $.ajax({
+                type: 'POST',
+                url: "/PersonaGrupo/Editar",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success) {
+                        correcto("La asignación ha sido registrada exitosamente");
+                        window.location.href = "/PersonaGrupo";
+                    }
+                    else {
+                        advertencia("No se ha completado el registro. Favor revisar");
+                        //$('#txtNombreCompleto').val(nombrecompleto);
+                        //$('#txtEdad').val(edad);
+                        frmEnviar.submit();
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+        })
+
+
+    </script>
+}

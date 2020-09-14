@@ -114,5 +114,74 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
 
             return consulta.FirstOrDefault();
         }
+        //ECL
+        public IEnumerable<AsignacionDto> GetPersonaGrupoActivos()
+        {
+            var asigancion = _db.Asignacion;
+            var persona = _db.Persona;
+            var grupo = _db.Grupo;
+            var multitabla = _db.Multitabla;
+
+            var lista = from a in asigancion.Where(x => x.Estado == true)
+                        join p in persona on a.IdPersona equals p.IdPersona
+                        join g in grupo on a.IdGrupo equals g.IdGrupo
+                        join mi in multitabla on a.Cargo equals mi.IdMultitabla
+                        select new AsignacionDto
+                        {
+                            IdAsignacion = a.IdAsignacion,
+                            NombresCompleto = p.Nombres + " " + p.Apellidos,
+                            NombreGrupo = g.Nombre,
+                            FechaIngresoTexto = a.FechaIngreso.Value.ToShortDateString(),
+                            FechaSalidaTexto = a.FechaSalida.Value.ToShortDateString(),
+                            FormaIngreso = a.FormaIngreso,
+                            CargoTexto = mi.MultitablaDescripcion
+                        };
+
+            return lista.AsEnumerable();
+
+        }
+
+        public void LogicalDelete(int id)
+        {
+            var objDesdeDb = _db.Asignacion.FirstOrDefault(s => s.IdAsignacion == id);
+            objDesdeDb.Estado = false;
+        }
+
+        public AsignacionDto GetAsignacionPersonaGrupo(int? id)
+        {
+            var asigancion = _db.Asignacion;
+            var persona = _db.Persona;
+
+            var query = from a in asigancion.Where(x => x.IdAsignacion==id.GetValueOrDefault() && x.Estado == true)
+                        join p in persona on a.IdPersona equals p.IdPersona
+                        select new AsignacionDto
+                        {
+                            IdAsignacion = a.IdAsignacion,
+                            NombresCompleto = p.Nombres + " " + p.Apellidos,
+                            IdGrupo = a.IdGrupo,
+                            FechaIngreso = a.FechaIngreso,
+                            FechaSalida = a.FechaSalida,
+                            FormaIngreso = a.FormaIngreso,
+                            Cargo = a.Cargo
+                        };
+
+            return query.FirstOrDefault();
+
+        }
+
+ 
+        public void Update(Asignacion asignacion)
+        {
+            var objDesdeDb = _db.Asignacion.FirstOrDefault(s => s.IdAsignacion == asignacion.IdAsignacion);
+            objDesdeDb.IdGrupo = asignacion.IdGrupo;
+            objDesdeDb.FechaIngreso = asignacion.FechaIngreso;
+            objDesdeDb.FechaSalida = asignacion.FechaSalida;
+            objDesdeDb.FormaIngreso = asignacion.FormaIngreso;
+            objDesdeDb.Cargo = asignacion.Cargo;
+            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.FechaActualizacion = DateTime.Now;
+        }
+
+        //ECL
     }
 }
