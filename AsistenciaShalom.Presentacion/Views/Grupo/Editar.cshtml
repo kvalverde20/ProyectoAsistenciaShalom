@@ -136,7 +136,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "/PersonaGrupo/Editar",
+                url: "/Grupo/Editar",
                 data: frm,
                 contentType: false,
                 processData: false,
@@ -144,8 +144,8 @@
                  {
                         if (data.success)
                         {
-                            correcto("Los datos de la asignaciòn han sido actualizados exitosamente");
-                            window.location.href = "/PersonaGrupo";
+                            correcto("El Grupo ha sido actualizado exitosamente");
+                            window.location.href = "/Grupo";
                         }
                         else
                         {

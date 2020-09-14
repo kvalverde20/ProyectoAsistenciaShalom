@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 namespace AsistenciaShalom.Presentacion.Controllers
 {
     [ServiceFilter(typeof(Seguridad))]
-    public class UsuarioController : Controller
+    public class UsuarioController : BaseController
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;
         private readonly IMapper _mapper;
@@ -82,7 +82,8 @@ namespace AsistenciaShalom.Presentacion.Controllers
                             {
                                 IdPersona = usuarioRolDto.IdPersona.GetValueOrDefault(),
                                 Username = usuarioRolDto.Username,
-                                Contrasena = Cifrado.CifrarDatos(usuarioRolDto.Contrasena),
+                                //Contrasena = Cifrado.CifrarDatos(usuarioRolDto.Contrasena),
+                                Contrasena = GetDecrypter().Encrypt(usuarioRolDto.Contrasena),
                                 ContrasenaRepetida = usuarioRolDto.ContrasenaRepetida,
                                 Estado = true,
                                 UsuarioCreacion = HttpContext.Session.GetString("username"),
