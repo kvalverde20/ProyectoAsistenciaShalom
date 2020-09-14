@@ -134,10 +134,9 @@
             frm.append("tipoGrupo", tipoGrupo);
        
 
-
             $.ajax({
                 type: 'POST',
-                url: "/Grupo/Editar",
+                url: "/PersonaGrupo/Editar",
                 data: frm,
                 contentType: false,
                 processData: false,
@@ -145,8 +144,8 @@
                  {
                         if (data.success)
                         {
-                            correcto("Los datos del grupo han sido actualizados exitosamente");
-                            window.location.href = "/Grupo";
+                            correcto("Los datos de la asignaciòn han sido actualizados exitosamente");
+                            window.location.href = "/PersonaGrupo";
                         }
                         else
                         {

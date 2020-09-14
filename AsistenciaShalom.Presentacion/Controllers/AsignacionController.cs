@@ -144,7 +144,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             return View(asignacion);
         }
 
-
+   
 
     }
 }

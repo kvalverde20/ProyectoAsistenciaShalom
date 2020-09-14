@@ -30,6 +30,9 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         [Required(ErrorMessage = "El Cargo es obligatorio")]
         public string Cargo { get; set; }
 
+        [Display(Name = "Cargo")]
+        public string CargoTexto { get; set; }
+
         public bool? Estado { get; set; }
         public string UsuarioCreacion { get; set; }
         public DateTime? FechaCreacion { get; set; }
@@ -55,6 +58,11 @@ namespace AsistenciaShalom.AccesoDatos.Dto
 
         public int? IdGrupoFase { get; set; }
 
+        [Display(Name = "Fecha de Ingreso")]
+        public string FechaIngresoTexto { get; set; }
+
+        [Display(Name = "Fecha de Salida")]
+        public string FechaSalidaTexto { get; set; }
 
         //public GrupoDto Grupo{ get; set; }
         //public PersonaDto Persona { get; set; }
