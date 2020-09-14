@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "Sistema de Asistencia";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" href="~/assets/img/icon.ico" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/assets/css/toastr.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/assets/css/main.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/assets/css/util.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div class="row">
+        <div class="limiter">
+            <div class="container-login100">
+                <div class="wrap-login100">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="login100-form-title" style="background-image: url('../assets/img/BannerShalom.jpg');">
+
+                            <span class="login100-form-title-1">
+                                @*Sistema de Asistencia*@
+                            </span>
+                        </div>
+                    </div>
+                        <form class="login100-form validate-form">
+                            <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                                <span class="label-input100">Usuario</span>
+                                <input id="txtUsuario" class="input100" type="text" placeholder="Ingrese su usuario">
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                                <span class="label-input100">Contraseña</span>
+                                <input id="txtpassword" class="input100" type="password" placeholder="Ingrese su contraseña">
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <div class="container-login100-form-btn">
+                                @*<button class="login100-form-btn">
+                        Login
+                    </button>*@
+
+                                <input type="button" class="login100-form-btn" onclick="Enviar()" value="Ingresar" />
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+    <!--===============================================================================================-->
+    <script src="~/assets/js/core/jquery.3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/assets/js/core/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/assets/js/toastr.min.js"></script>
+
+</body>
+</html>
+
+
+<script>
+    function Enviar() {
+        var user = $('#txtUsuario').val();
+        var pass = $('#txtpassword').val();
+
+        var url = "Login/ValidarUsuario";
+
+        $.get(url, { username: user, password: pass}, function (data) {
+            if (data) {
+                toastr.success("Válido","", {
+                            "progressBar": true});
+                document.location.href = "/Home";
+                
+            } else {
+                toastr.error("Contraseña o usuario incorrecto", "ERROR", {
+                    "progressBar": true,
+                    "showDuration": "200"
+                });
+
+            }
+        })
+    }
+</script>

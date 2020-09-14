@@ -17,10 +17,17 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         public DateTime? FechaActualizacion { get; set; }
 
 
+
         public string NombrePersona { get; set; }
         public string ApellidosPersona { get; set; }
+        public string NombreCompletoPersona { get; set; }
         public string ContrasenaRepetida { get; set; }
-
+        public int IdGrupo { get; set; }
+        public int IdUsuarioRol { get; set; }
+        public int IdRol { get; set; }
+        public string NombreRol { get; set; }
+        public string NombreGrupo { get; set; }
+        public int IdAsignacion { get; set; }
 
     }
 }

@@ -6,13 +6,16 @@ using System.Transactions;
 using AsistenciaShalom.AccesoDatos.Data.IRepositorio;
 using AsistenciaShalom.AccesoDatos.Dto;
 using AsistenciaShalom.Entidades.Models;
+using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AsistenciaShalom.Presentacion.Controllers
 {
+    [ServiceFilter(typeof(Seguridad))]
     public class UsuarioController : Controller
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;
@@ -82,7 +85,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                                 Contrasena = Cifrado.CifrarDatos(usuarioRolDto.Contrasena),
                                 ContrasenaRepetida = usuarioRolDto.ContrasenaRepetida,
                                 Estado = true,
-                                UsuarioCreacion = "kmvalver",
+                                UsuarioCreacion = HttpContext.Session.GetString("username"),
                                 FechaCreacion = DateTime.Now
                             };
 
@@ -156,22 +159,28 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    if (usuarioRolDto.IdUsuarioRol != 0)
+                    using (var transaccion = new TransactionScope())
                     {
-                        var usuarioDto = new UsuarioDto() {
-                            Contrasena = usuarioRolDto.Contrasena
-                        };
+                        if (usuarioRolDto.IdUsuarioRol != 0)
+                        {
+                            var usuarioDto = new UsuarioDto()
+                            {
+                                IdUsuario = usuarioRolDto.IdUsuario,
+                                Username = usuarioRolDto.Username,
+                                UsuarioActualizacion = HttpContext.Session.GetString("username")
+                            };
 
-                        // Actualizar Usuario
-                        //var entUsuario = _mapper.Map<Usuario>(usuarioDto);
-                        //_contenedorTrabajo.Usuario.Update(entUsuario);
-                        //_contenedorTrabajo.Save();
+                            // Actualizar Usuario
+                            var entUsuario = _mapper.Map<Usuario>(usuarioDto);
+                            _contenedorTrabajo.Usuario.Update(entUsuario);
+                            _contenedorTrabajo.Save();
 
-                        // Actualizar Usuario-Rol
-                        var entUsuarioRol = _mapper.Map<UsuarioRol>(usuarioRolDto);
-                        _contenedorTrabajo.UsuarioRol.Update(entUsuarioRol);
-                        _contenedorTrabajo.Save();
-
+                            // Actualizar Usuario-Rol
+                            var entUsuarioRol = _mapper.Map<UsuarioRol>(usuarioRolDto);
+                            _contenedorTrabajo.UsuarioRol.Update(entUsuarioRol);
+                            _contenedorTrabajo.Save();
+                            transaccion.Complete();
+                        }                    
                         return Json(new { success = true }); ;
                     }
                 }

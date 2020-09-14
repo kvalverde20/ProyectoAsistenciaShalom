@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AsistenciaShalom.AccesoDatos.Data;
 using AsistenciaShalom.AccesoDatos.Data.IRepositorio;
 using AsistenciaShalom.AccesoDatos.Data.Repositorio;
+using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Mapper;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +39,10 @@ namespace FirstAppNetCore
 
             //services.AddControllersWithViews();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddHttpContextAccessor();
             services.AddRazorPages();
+            services.AddSession();
+            services.AddScoped<Seguridad>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,12 +69,12 @@ namespace FirstAppNetCore
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Persona}/{action=Index}/{id?}");
+                    pattern: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }

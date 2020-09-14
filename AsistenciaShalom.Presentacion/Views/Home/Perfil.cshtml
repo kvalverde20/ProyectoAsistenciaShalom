@@ -1,0 +1,194 @@
+﻿@using AsistenciaShalom.AccesoDatos.Dto
+@model UsuarioDto
+
+@{
+    ViewData["Title"] = "Perfil del usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Menu"] = "Home";
+    ViewData["Controlador"] = "Home";
+}
+
+<form asp-controller="Home" asp-action="Perfil" method="post" id="frmEnviar">
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-tools pull-left">
+                <h4 class="card-title">@ViewData["Title"] </h4>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <input type="hidden" class="enviar" asp-for="IdUsuario" id="hdnIdUsuario"  />
+                <div class="col-sm-12 form-group row">
+                    <div class="col-lg-3 col-md-3 col-sm-6">
+                        <span class="h3"><strong>Nombre Completo:</strong></span>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-6">
+                        <span class="h3">@Html.DisplayFor(model => model.NombreCompletoPersona)</span>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-12 form-group row">
+                    <div class="col-lg-3 col-md-3 col-sm-6">
+                        <span class="h3"><strong>Grupo de Oración:</strong></span>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-6">
+                        <span class="h3">@Html.DisplayFor(model => model.NombreGrupo)</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 form-group row">
+                    <div class="col-lg-3 col-md-3 col-sm-6">
+                        <span class="h3"><strong>Rol:</strong></span>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-6">
+                        <span class="h3">@Html.DisplayFor(model => model.NombreRol)</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 form-group row">
+                    <div class="col-lg-3 col-md-3 col-sm-6">
+                        <span class="h3"><strong>Nombre Usuario:</strong></span>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-6">
+                        <span class="h3">@Html.DisplayFor(model => model.Username)</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 form-group row">
+                    <div class="col-lg-9 col-md-9 col-sm-6">
+
+                        <button id="btnRestablecer" class="btn btn-secondary btn-round" data-toggle="modal"
+                                data-target="#modal">
+                            @*onclick="Abrir()"*@
+                            <span class="btn-label">
+                                <i class="fas fa-user-edit"></i>
+                            </span>
+                            Restablecer contraseña
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <br /><br />
+
+
+        </div>
+
+
+    </div>
+
+</form>
+
+@*------Modal-------*@
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="lblTitulo">Restablecer Contraseña</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label>Nueva Contraseña</label>
+                    <input type="password" id="txtNuevaContrasena" class="form-control enviar" name="Contrasena" maxlength="20" />
+
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña</label>
+                    <input type="password" id="txtConfirmarContrasena" class="form-control enviar" name="ContrasenaRepetida" maxlength="20" />
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnGuardar" class="btn btn-primary">
+                    <span class="btn-label"><i class="fas fa-save"></i> </span>Guardar
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnCerrar">
+                    <span class="btn-label"><i class="fas fa-times-circle"></i> </span>Cancelar
+                </button>
+            </div>
+            <div id="divError">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <link href="~/assets/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/assets/js/toastr.min.js"></script>
+
+
+    <script>
+
+        // Boton Restablecer contraseña
+        $('#btnRestablecer').click(function (event) {
+            event.preventDefault();
+            $('#txtNuevaContrasena').val("");
+            $('#txtConfirmarContrasena').val("");
+        });
+
+        $('#btnGuardar').click(function (event) {
+            event.preventDefault();
+
+            var nuevacontrasena = $('#txtNuevaContrasena').val();
+            var confcontrasena = $('#txtConfirmarContrasena').val();
+            //var idusuario = $('#hdnIdUsuario').val();
+
+            if (nuevacontrasena != confcontrasena) {
+                toastr.error("Las contraseñas no coinciden", "ERROR", {
+                    "progressBar": true,
+                    "showDuration": "1"
+                });
+                return;
+            }
+
+            var frm = new FormData();
+            //enviar(frm);
+            //frm.append("IdUsuario", idusuario)
+            frm.append("Contrasena", nuevacontrasena);
+            frm.append("ContrasenaRepetida", confcontrasena);
+
+            $.ajax({
+                type: 'POST',
+                url: "Home/ActualizarPassword",
+                data: frm,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data) {
+                        toastr.success("La contraseña ha sido actualizada", "ÉXITO", {
+                            "progressBar": true,
+                            "showDuration": "1"
+                        });
+                        document.getElementById("btnCerrar").click();
+                    }
+                    else {
+                        toastr.error("Ha ocurrido una falla en el proceso", "ERROR", {
+                            "progressBar": true,
+                            "showDuration": "1"
+                        });
+                    }
+                },
+                error: function () {
+                    error("Ha ocurrido un error en el proceso");
+                }
+
+            });
+
+
+        });
+
+    </script>
+
+}

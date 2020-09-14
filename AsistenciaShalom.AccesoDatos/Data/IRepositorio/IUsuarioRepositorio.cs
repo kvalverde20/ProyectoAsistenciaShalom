@@ -9,6 +9,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
     public interface IUsuarioRepositorio : IRepositorio<Usuario>
     {
         IEnumerable<UsuarioDto> GetListaUsuariosTotales();
+        UsuarioDto GetDatosGeneralesXIdUsuario(int idUsuario);
         void Update(Usuario usuario);
 
     }

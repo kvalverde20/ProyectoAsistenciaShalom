@@ -6,6 +6,7 @@ using System.Transactions;
 using AsistenciaShalom.AccesoDatos.Data.IRepositorio;
 using AsistenciaShalom.AccesoDatos.Dto;
 using AsistenciaShalom.Entidades.Models;
+using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AsistenciaShalom.Presentacion.Controllers
 {
+    [ServiceFilter(typeof(Seguridad))]
     public class AsignacionGrupoFaseController : Controller
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;

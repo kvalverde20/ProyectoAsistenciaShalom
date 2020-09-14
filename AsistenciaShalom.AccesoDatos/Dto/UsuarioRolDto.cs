@@ -24,7 +24,7 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         public string Username { get; set; }
 
         [DataType(DataType.Password)]
-        //[Required(ErrorMessage = "La Contraseña es obligatoria")]
+        [Required(ErrorMessage = "La Contraseña es obligatoria")]
         [Display(Name = "Contraseña")]
         public string Contrasena { get; set; }
 

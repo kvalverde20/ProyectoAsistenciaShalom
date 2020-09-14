@@ -27,39 +27,25 @@
 
             <div class="row">
 
-                <input type="hidden" id="hdnIdUsuario" asp-for="IdUsuarioRol" />
+                <input type="hidden" id="hdnIdUsuarioRol" asp-for="IdUsuarioRol" />
+                <input type="hidden" id="hdnIdUsuario" asp-for="IdUsuario" />
                 <input type="hidden" id="hdnIdPersona" asp-for="IdPersona" />
-                <div class="col-lg-6 col-md-6 col-sm-12">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="form-group">
                         <label asp-for="NombreCompleto"></label>
                         <input id="txtNombreCompleto" asp-for="NombreCompleto" class="form form-control" disabled />
 
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="form-group">
                         <label asp-for="Username"></label>
-                        <input id="txtUsername" asp-for="Username" class="form form-control" disabled />
-                        <input type="hidden" id="hdnUsername" class="form form-control" asp-for="Username" />
+                        <input id="txtUsername" asp-for="Username" class="form form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
 
                     </div>
                 </div>
-
-                @*<div class="col-lg-6 col-md-6 col-sm-12">
-            <div class="form-group">
-                <label asp-for="Contrasena"></label>
-                <input id="txtContrasena" asp-for="Contrasena" class="form form-control" maxlength="20" />
-                <span asp-validation-for="Contrasena" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div class="col-lg-6 col-md-6 col-sm-12">
-            <div class="form-group">
-                <label asp-for="ContrasenaRepetida"></label>
-                <input id="txtRepetirContrasena" asp-for="ContrasenaRepetida" class="form form-control" maxlength="20" />
-                <span asp-validation-for="ContrasenaRepetida" class="text-danger"></span>
-            </div>
-        </div>*@
 
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
@@ -100,25 +86,22 @@
 
             var frmEnviar = document.getElementById("frmEnviar");
 
-            var idusuarioRol = $('#hdnIdUsuario').val();
+            var idusuarioRol = $('#hdnIdUsuarioRol').val();
+            var idusuario = $('#hdnIdUsuario').val(); 
             var idpersona = $('#hdnIdPersona').val();       
-            var username = $('#hdnUsername').val();  
-            var contrasena = $('#txtContrasena').val();
-            var contrasenarepetida = $('#txtRepetirContrasena').val();
+            var username = $('#txtUsername').val();  
+            var contrasena = "-"; //$('#txtContrasena').val();
+            var contrasenarepetida = "-"; // $('#txtRepetirContrasena').val();
             var idrol = $('#ddlRoles option:selected').val();
             
             var frm = new FormData();
             frm.append("IdUsuarioRol", idusuarioRol);
+            frm.append("IdUsuario", idusuario);
             frm.append("IdPersona", idpersona);
             frm.append("Username", username);
             frm.append("Contrasena", contrasena);
             frm.append("ContrasenaRepetida", contrasenarepetida);
             frm.append("IdRol", idrol);
-
-            //if (contrasena   != contrasenarepetida) {
-            //    error("La contraseña debe ser la misma");
-            //    return;
-            //}
 
             $.ajax({
                 type: 'POST',
@@ -134,8 +117,6 @@
                     else {
                         advertencia("No se ha completado el registro. Favor revisar");
                         frmEnviar.submit();
-                        //toastr.error(data.message);
-                        //$("#log").append("<div>El Username ya existe! </div>");
 
                     }
                 },

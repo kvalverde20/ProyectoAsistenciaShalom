@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AsistenciaShalom.Presentacion.Filters;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AsistenciaShalom.Presentacion.Controllers
 {
+    //[ServiceFilter(typeof(Seguridad))]
     public class ErrorController : Controller
     {
         readonly ILogger _logger;

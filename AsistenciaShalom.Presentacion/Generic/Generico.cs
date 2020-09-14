@@ -1,18 +1,22 @@
 ﻿using AsistenciaShalom.AccesoDatos.Data.IRepositorio;
 using AsistenciaShalom.AccesoDatos.Dto;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AsistenciaShalom.Presentacion.Controllers;
 
 namespace AsistenciaShalom.Presentacion.Generic
 {
-    public  class Generico
+    public  class Generico 
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;
         private readonly IMapper _mapper;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
 
         public Generico(IContenedorTrabajo contenedorTrabajo, IMapper mapper)
         {

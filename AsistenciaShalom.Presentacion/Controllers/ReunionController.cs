@@ -6,6 +6,7 @@ using System.Transactions;
 using AsistenciaShalom.AccesoDatos.Data.IRepositorio;
 using AsistenciaShalom.AccesoDatos.Dto;
 using AsistenciaShalom.Entidades.Models;
+using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AsistenciaShalom.Presentacion.Controllers
 {
+    [ServiceFilter(typeof(Seguridad))]
     public class ReunionController : Controller
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;
@@ -303,6 +305,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                         var nameComentario = "Comentario-" + id.ToString();
                         var nameFlagAsistencia = "FlagAsistencia-" + id.ToString();
                         asistenciaDto.FlagAsistencia = false; // Reseteamos las asistencias guardadas anteriormente
+                        asistenciaDto.Comentario = "";
 
                         foreach (var key in form.Keys)
                         {
