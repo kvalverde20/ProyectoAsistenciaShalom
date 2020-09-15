@@ -6,18 +6,20 @@ using System.Text;
 
 namespace AsistenciaShalom.Entidades.Models
 {
-    public partial class PaginaUsuarioRol
+    [Table("PAGINA_ROL")]
+    public partial class PaginaRol
     {
         [Key]
-        public int IdPaginaUsuarioRol { get; set; }
+        public int IdPaginaRol { get; set; }
         public int IdPagina { get; set; }
-        public int IdUsuarioRol { get; set; }
+        public int IdRol { get; set; }
         public bool? Estado { get; set; }
 
         [ForeignKey("IdPagina")]
         public virtual Pagina IdPaginaNavigation { get; set; }
 
-        [ForeignKey("IdUsuarioRol")]
-        public virtual UsuarioRol IdUsuarioRolNavigation { get; set; }
+        [ForeignKey("IdRol")]
+        public virtual Rol IdRolNavigation { get; set; }
+
     }
 }

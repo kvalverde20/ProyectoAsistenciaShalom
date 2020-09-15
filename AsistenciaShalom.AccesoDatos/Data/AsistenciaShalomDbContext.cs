@@ -33,7 +33,7 @@ namespace AsistenciaShalom.AccesoDatos.Data
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; }
         public virtual DbSet<Pagina> Pagina { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
-        public virtual DbSet<PaginaUsuarioRol> PaginaUsuarioRol { get; set; }
+        public virtual DbSet<PaginaRol> PaginaRol { get; set; }
 
     }
 }

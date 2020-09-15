@@ -10,7 +10,7 @@ namespace AsistenciaShalom.Entidades.Models
     {
         public Pagina()
         {
-            PaginaUsuarioRol = new HashSet<PaginaUsuarioRol>();
+            PaginaRol = new HashSet<PaginaRol>();
         }
 
         [Key]
@@ -23,6 +23,6 @@ namespace AsistenciaShalom.Entidades.Models
 
         [ForeignKey("IdMenu")]
         public virtual Menu IdMenuNavigation { get; set; }
-        public virtual ICollection<PaginaUsuarioRol> PaginaUsuarioRol { get; set; }
+        public virtual ICollection<PaginaRol> PaginaRol { get; set; }
     }
 }

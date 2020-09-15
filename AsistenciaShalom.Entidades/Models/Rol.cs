@@ -19,5 +19,6 @@ namespace AsistenciaShalom.Entidades.Models
         public bool? Estado { get; set; }
 
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
+        public virtual ICollection<PaginaRol> PaginaRol { get; set; }
     }
 }
