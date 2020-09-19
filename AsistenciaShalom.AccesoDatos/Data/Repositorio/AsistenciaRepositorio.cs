@@ -26,7 +26,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             objDesdeDb.Comentario = asistencia.Comentario;
             objDesdeDb.FlagAsistencia = asistencia.FlagAsistencia;
             //-------------------------
-            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.UsuarioActualizacion = asistencia.UsuarioActualizacion;
             objDesdeDb.FechaActualizacion = DateTime.Now;
         }
 

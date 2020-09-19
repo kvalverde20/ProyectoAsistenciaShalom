@@ -135,17 +135,17 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             objDesdeDb.RhemaOracion = reunion.RhemaOracion;
             objDesdeDb.Predicador = reunion.Predicador;
             //-------------------------
-            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.UsuarioActualizacion = reunion.UsuarioActualizacion;
             objDesdeDb.FechaActualizacion = DateTime.Now;
         }
 
-        public void UpdateEstadoAsistencia(int idReunion) 
+        public void UpdateEstadoAsistencia(Reunion reunion) 
         {
-            var objDesdeDb = _db.Reunion.FirstOrDefault(s => s.IdReunion == idReunion);
+            var objDesdeDb = _db.Reunion.FirstOrDefault(s => s.IdReunion == reunion.IdReunion);
 
             objDesdeDb.EstadoRegistroAsistencia = true;
             //-------------------------
-            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.UsuarioActualizacion = reunion.UsuarioActualizacion;
             objDesdeDb.FechaActualizacion = DateTime.Now;
         }
     }

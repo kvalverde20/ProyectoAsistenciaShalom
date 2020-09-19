@@ -35,18 +35,21 @@ namespace AsistenciaShalom.Presentacion.Controllers
             return View();
         }
 
-        public List<ReunionDto> listarReuniones(int? idGrupo)
+        public List<ReunionDto> listarReuniones()
         {
+            var idUsuario = int.Parse(HttpContext.Session.GetString("usuario")); // viene el IdUsuario
+            var objUsuario = _contenedorTrabajo.Usuario.GetDatosGeneralesXIdUsuario(idUsuario);
+            var idGrupo = objUsuario.IdGrupo;
             List<ReunionDto> lista = new List<ReunionDto>();
             try
             {
-                if (idGrupo == null || idGrupo == 0)
+                if (idGrupo == 0)
                 {
                     lista = _contenedorTrabajo.Reunion.GetReunionesTotales().ToList();
                 }
                 else
                 {
-                    lista = _contenedorTrabajo.Reunion.GetReunionesPorGrupo(idGrupo.Value).ToList();
+                    lista = _contenedorTrabajo.Reunion.GetReunionesPorGrupo(idGrupo).ToList();
                 }
 
                     
@@ -87,7 +90,10 @@ namespace AsistenciaShalom.Presentacion.Controllers
                     {
                         if (reunionDto.IdReunion == 0)
                         {
-                            var idPersona = 267; // simulando
+                            //var idPersona = 267; // simulando
+                            var idUsuario = int.Parse(HttpContext.Session.GetString("usuario")); // viene el IdUsuario
+                            var objUsuario = _contenedorTrabajo.Usuario.GetDatosGeneralesXIdUsuario(idUsuario);
+                            var idPersona = objUsuario.IdPersona;
                             var idGrupoFase = _contenedorTrabajo.Asignacion.GetAsignacionPorPersona(idPersona).IdGrupoFase.GetValueOrDefault();
 
                             reunionDto.IdGrupoFase = idGrupoFase;
@@ -96,7 +102,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                             reunionDto.RhemaOracion = reunionDto.RhemaOracion == null ? "" : reunionDto.RhemaOracion;
                             reunionDto.Predicador = reunionDto.Predicador == null ? "" : reunionDto.Predicador;
                             reunionDto.EstadoRegistroAsistencia = false;
-                            reunionDto.UsuarioCreacion = "kmvalver";
+                            reunionDto.UsuarioCreacion = HttpContext.Session.GetString("username");
                             reunionDto.FechaCreacion = DateTime.Now;
 
                             var entidad = _mapper.Map<Reunion>(reunionDto);
@@ -118,7 +124,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                                     IdAsignacion = asig.IdAsignacion,
                                     FlagAsistencia = false,
                                     Comentario = "",
-                                    UsuarioCreacion = "kmvalver",
+                                    UsuarioCreacion = HttpContext.Session.GetString("username"),
                                     FechaCreacion = DateTime.Now
                                 };
                                 var entidadAsistencia = _mapper.Map<Asistencia>(asistenciaDto);
@@ -175,9 +181,13 @@ namespace AsistenciaShalom.Presentacion.Controllers
             {
                 using (var transaccion = new TransactionScope())
                 {
-                    var idreunion = int.Parse(form["hdnIdReunion"]);
-                    var listaAsistencia = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunion(idreunion).ToList();
-                    //var hd = form["hdnIdReunion-" + idreunion];
+                    var reunion = new Reunion() {
+                        IdReunion = int.Parse(form["hdnIdReunion"]),
+                        UsuarioActualizacion = HttpContext.Session.GetString("username")
+                    };
+
+                    //var idreunion = int.Parse(form["hdnIdReunion"]);
+                    var listaAsistencia = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunion(reunion.IdReunion).ToList();
                     var listaElementos = new List<AsistenciaDto>();
 
                     foreach (var asistenciaDto in listaAsistencia)
@@ -200,11 +210,12 @@ namespace AsistenciaShalom.Presentacion.Controllers
                                 asistenciaDto.FlagAsistencia = bool.Parse(value);
                             }
                         }
+                        asistenciaDto.UsuarioActualizacion = HttpContext.Session.GetString("username");
                         _contenedorTrabajo.Asistencia.Update(asistenciaDto);
                         _contenedorTrabajo.Save();
                     }
 
-                    _contenedorTrabajo.Reunion.UpdateEstadoAsistencia(idreunion);
+                    _contenedorTrabajo.Reunion.UpdateEstadoAsistencia(reunion);
                     _contenedorTrabajo.Save();
                     transaccion.Complete();
 
@@ -289,7 +300,8 @@ namespace AsistenciaShalom.Presentacion.Controllers
                     TipoReunion = form["txtTipoReunion"].ToString(),
                     TemaFormacion = form["txtTemaFormacion"].ToString(),
                     Predicador = form["txtPredicador"].ToString(),
-                    RhemaOracion = form["txtRhemaOracion"].ToString()
+                    RhemaOracion = form["txtRhemaOracion"].ToString(),
+                    UsuarioActualizacion = HttpContext.Session.GetString("username")
                 };
                 _contenedorTrabajo.Reunion.Update(reunionActualizar);
                 _contenedorTrabajo.Save();
@@ -306,6 +318,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                         var nameFlagAsistencia = "FlagAsistencia-" + id.ToString();
                         asistenciaDto.FlagAsistencia = false; // Reseteamos las asistencias guardadas anteriormente
                         asistenciaDto.Comentario = "";
+                        asistenciaDto.UsuarioActualizacion = HttpContext.Session.GetString("username");
 
                         foreach (var key in form.Keys)
                         {

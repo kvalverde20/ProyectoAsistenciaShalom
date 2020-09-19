@@ -32,12 +32,12 @@
     <div class="card-body">
 
         <form asp-controller="Reunion" id="frmEnviar">
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Grupo:</label>
                         @Html.DropDownList("IdGrupo", listaGrupo, new { @id = "ddlGrupo", @class = "form form-control" })
                     </div>
-                </div>
+                </div>*@
 
 
                 <div class="table-responsive">
@@ -78,21 +78,20 @@
 
             var url = "Reunion/listarReuniones";
             pintarTableReuniones(url, ["idReunion", "nombreGrupo", "nombreFase", "fechaReunionTexto", "tipoReunion",
-                                    "temaFormacion","predicador" ],
+                                    "temaFormacion","predicador"],
                                     "idReunion", "Reunion");
         }
 
-        $('#ddlGrupo').on('change', function () {
-            //alert(this.value);
-            var valor = $('#ddlGrupo option:selected').val();
+        //$('#ddlGrupo').on('change', function () {
 
-            var table = $('#table').DataTable();
-            table.destroy();
+        //    var valor = $('#ddlGrupo option:selected').val();
+        //    var table = $('#table').DataTable();
+        //    table.destroy();
 
-            pintarTableReuniones("Reunion/listarReuniones/?idGrupo=" + valor,
-                                ["idReunion", "nombreGrupo", "nombreFase", "fechaReunionTexto", "tipoReunion", "temaFormacion", "predicador"],
-                                "idReunion", "Reunion");
-        });
+        //    pintarTableReuniones("Reunion/listarReuniones/?idGrupo=" + valor,
+        //                        ["idReunion", "nombreGrupo", "nombreFase", "fechaReunionTexto", "tipoReunion", "temaFormacion", "predicador"],
+        //                        "idReunion", "Reunion");
+        //});
 
 
     </script>

@@ -62,6 +62,10 @@ namespace AsistenciaShalom.Presentacion.Controllers
         public IActionResult CerrarSesion()
         {
             HttpContext.Session.Remove("usuario");
+            HttpContext.Session.Remove("username");
+            HttpContext.Session.Remove("nombreCompletoPersona");
+            HttpContext.Session.Remove("nombreGrupo");
+            HttpContext.Session.Remove("nombreRol");
 
             return RedirectToAction(nameof(Index));
         }

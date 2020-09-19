@@ -13,7 +13,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         IEnumerable<AsistenciaDto> ListarOvejasPorGrupo(int idgrupo);
         IEnumerable<AsistenciaDto> ListarAsistenciasPorReunion(int idReunion);
         void Update(Reunion reunion);
-        void UpdateEstadoAsistencia(int idReunion);
+        void UpdateEstadoAsistencia(Reunion reunion);
 
     }
 }
