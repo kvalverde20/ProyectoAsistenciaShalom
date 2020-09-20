@@ -41,6 +41,11 @@ table.blueTable {
 
     table.blueTable tbody td {
         font-size: 14px;
+        height: 32px;
+    }
+
+    table.blueTable tbody tr {
+        height: 10px;
     }
 
     table.blueTable thead {

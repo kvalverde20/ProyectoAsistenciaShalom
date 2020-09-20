@@ -394,8 +394,10 @@ function pintarMultiplePopup(divTabla,url, cabeceras = ["Id","Nombre Completo"],
 	var contenido = "";
 	$.get(url, function (data) {
 
-		//Esto
-		contenido += "<table id='tablaPopup'>";
+		
+		contenido += "<div class='table-responsive'>";
+		//contenido += "<table id='tablaPopup' class='display table table-bordered table-striped table-hover blueTable'>";
+		contenido += "<table id='tablaPopup' class='table blueTable table-bordered table-hover'>";
 		contenido += "<thead>";
 		contenido += "<tr>";
 		for (var i = 0; i < cabeceras.length; i++) {
@@ -417,7 +419,7 @@ function pintarMultiplePopup(divTabla,url, cabeceras = ["Id","Nombre Completo"],
 			contenido += `
 					<td>
 
-						<i class="fa fa-check btn btn-success" aria-hidden="true"
+						<i style='padding: 3px;' class='fa fa-check btn btn-success' aria-hidden="true"
 						   onclick="AsignarNombre(${objetoActual[propiedadId]},
                               '${objetoActual[propiedadMostrar]}')">
 
@@ -428,8 +430,13 @@ function pintarMultiplePopup(divTabla,url, cabeceras = ["Id","Nombre Completo"],
 		}
 		contenido += "</tbody>";
 		contenido += "</table>";
+		contenido += "</div>";
 		document.getElementById(divTabla).innerHTML = contenido;
-		$('#tablaPopup').DataTable();
+		$('#tablaPopup').DataTable({
+			"searching": false, 
+			"info": false,
+			"lengthChange": false 
+		});
 	});
 	
 	

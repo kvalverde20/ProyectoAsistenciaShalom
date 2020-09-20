@@ -12,6 +12,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         void LogicalDelete(int id);
         IEnumerable<PersonaDto> GetPersonasActivas();
         PersonaDto GetPersonaPorId(int? id);
+        IEnumerable<PersonaDto> GetListaPersonasUsuario(string nombrecompleto);
 
     }
 }

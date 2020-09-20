@@ -65,6 +65,30 @@ namespace AsistenciaShalom.Presentacion.Controllers
             return View();
         }
 
+        [HttpGet(("Usuario/Usuario/ListarPersonaUsuario"))]
+        public List<PersonaDto> ListarPersonaUsuario(string nombreCompleto)
+        {
+            var lista = new List<PersonaDto>();
+            try
+            {
+                if(nombreCompleto == null || nombreCompleto == "")
+                {                   
+                    lista = _contenedorTrabajo.Persona.GetPersonasActivas().ToList();
+                }
+                else
+                {
+                    lista = _contenedorTrabajo.Persona.GetListaPersonasUsuario(nombreCompleto).ToList();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return lista;
+        }
 
         [HttpPost]
         public IActionResult Agregar(UsuarioRolDto usuarioRolDto)

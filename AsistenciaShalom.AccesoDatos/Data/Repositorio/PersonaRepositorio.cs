@@ -72,7 +72,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             MinisterioTexto = mi.Nombre,
                             ComunidadTexto = c.Nombre,
                             Estado = p.Estado.Value,
-                            EstadoAsignacionGrupo = p.EstadoAsignacionGrupo
+                            EstadoAsignacionGrupo = p.EstadoAsignacionGrupo,
+                            NombresCompleto = p.Nombres +" "+p.Apellidos
                         };
 
             return lista.AsEnumerable();
@@ -109,5 +110,21 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
 
         }
 
+        public IEnumerable<PersonaDto> GetListaPersonasUsuario(string nombrecompleto)
+        {
+            var persona = _db.Persona;
+
+            var lista = from p in persona.Where(x => x.Estado == true && (x.Nombres+" "+x.Apellidos).Contains(nombrecompleto))
+                        select new PersonaDto
+                        {
+                            IdPersona = p.IdPersona,
+                            Nombres = p.Nombres,
+                            Apellidos = p.Apellidos,
+                            NombresCompleto = p.Nombres +" "+ p.Apellidos
+
+                        };
+
+            return lista.AsEnumerable();
+        }
     }
 }
