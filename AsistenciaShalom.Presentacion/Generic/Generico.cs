@@ -132,5 +132,9 @@ namespace AsistenciaShalom.Presentacion.Generic
             return lista;
         }
 
+        //---- Lista de Paginas
+        public static List<PaginaRolDto> listaPaginaRol;
+        public static List<MenuDto> listaMenu;
+
     }
 }

@@ -1,8 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Http;
+@using AsistenciaShalom.Presentacion.Generic;
+@using AsistenciaShalom.AccesoDatos.Dto;
+
 @{
     var idusuario = Context.Session.GetString("usuario");
     var nombrecompleto = Context.Session.GetString("nombreCompletoPersona");
     var nombrerol = Context.Session.GetString("nombreRol");
+    var idrol = Context.Session.GetString("idRol");
 }
 
 <div class="sidebar sidebar-style-2">
@@ -51,287 +55,104 @@
 
             <ul class="nav nav-primary">
 
-                @*<li class="nav-section">
-                        <span class="sidebar-mini-icon">
-                            <i class="fa fa-ellipsis-h"></i>
-                        </span>
-                        <h4 class="text-section">MENÚ</h4>
-                    </li>*@
-                @*---------------Menu Mantenimiento----------------*@
-
-                @if (ViewData["Menu"].ToString() == "Mantenimiento")
+                @if (Generico.listaMenu != null)
                 {
-                    <li class="nav-item active submenu">
+                    @foreach (MenuDto menu in Generico.listaMenu)
+                    {
+                            @if (ViewData["Menu"].ToString() == menu.Nombre)
+                            {
+                                <li class="nav-item active submenu">
+                                    <a data-toggle="collapse" href="#@menu.Nombre">
 
-                        <a data-toggle="collapse" href="#mantenimiento" class="collapsed" aria-expanded="false">
-                            <i class="fas fa-address-book"></i>
-                            <p>Mantenimiento</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse show" id="mantenimiento">
-                            <ul class="nav nav-collapse">
-                                @if (ViewData["Controlador"].ToString() == "Persona")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="Persona" asp-action="Index">
-                                            <span class="sub-item">Personas</span>
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="Persona" asp-action="Index">
-                                            <span class="sub-item">Personas</span>
-                                        </a>
-                                    </li>
-                                }
-
-                                @if (ViewData["Controlador"].ToString() == "Grupo")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="Grupo" asp-action="Index">
-                                            <span class="sub-item">Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="Grupo" asp-action="Index">
-                                            <span class="sub-item">Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-
-                                @if (ViewData["Controlador"].ToString() == "PersonaGrupo")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="PersonaGrupo" asp-action="Index">
-                                            <span class="sub-item">Persona por Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="PersonaGrupo" asp-action="Index">
-                                            <span class="sub-item">Persona por Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-
-                                @if (ViewData["Controlador"].ToString() == "GrupoFase")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="GrupoFase" asp-action="Index">
-                                            <span class="sub-item">Fases por Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="GrupoFase" asp-action="Index">
-                                            <span class="sub-item">Fases por Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-
-                                @if (ViewData["Controlador"].ToString() == "Usuario")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="Usuario" asp-action="Index">
-                                            <span class="sub-item">Usuarios</span>
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="Usuario" asp-action="Index">
-                                            <span class="sub-item">Usuarios</span>
-                                        </a>
-                                    </li>
-                                }
-
-
-                            </ul>
-                        </div>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a data-toggle="collapse" href="#mantenimiento" class="collapsed" aria-expanded="false">
-                            <i class="fas fa-address-book"></i>
-                            <p>Mantenimiento</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="mantenimiento">
-                            <ul class="nav nav-collapse">
-                                <li class="nav-li">
-                                    <a asp-controller="Persona" asp-action="Index">
-                                        <span class="sub-item">Personas</span>
+                                        @if (menu.Nombre == "Mantenimiento")
+                                        {
+                                            <i class="fas fa-address-book"></i>
+                                        }
+                                        @if (menu.Nombre == "Administracion")
+                                        {
+                                             <i class="fas fa-layer-group"></i>
+                                        }
+                                        @if (menu.Nombre == "Control")
+                                        {
+                                             <i class="far fa-calendar-alt"></i>
+                                        }
+                                        
+                                        <p>@menu.Titulo</p>
+                                        <span class="caret"></span>
                                     </a>
-                                </li>
-                                <li class="nav-li">
-                                    <a asp-controller="Grupo" asp-action="Index">
-                                        <span class="sub-item">Grupo</span>
-                                    </a>
-                                </li>
-                                <li class="nav-li">
-                                    <a asp-controller="PersonaGrupo" asp-action="Index">
-                                        <span class="sub-item">Persona por Grupo</span>
-                                    </a>
-                                </li>
-                                <li class="nav-li">
-                                    <a asp-controller="GrupoFase" asp-action="Index">
-                                        <span class="sub-item">Fases por Grupo</span>
-                                    </a>
-                                </li>
-                                <li class="nav-li">
-                                    <a asp-controller="Usuario" asp-action="Index">
-                                        <span class="sub-item">Usuarios</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                                    <div class="collapse show" id="@menu.Nombre">
+                                        <ul class="nav nav-collapse">
 
+                                            @foreach (var opag in menu.PaginaRol)
+                                            {
+                                                @if (ViewData["Controlador"].ToString() == opag.Pagina.Controlador)
+                                                {
+                                                    <li class="nav-li active">
+                                                        <a asp-controller="@opag.Pagina.Controlador" asp-action="@opag.Pagina.Accion">
+                                                            <span class="sub-item">@opag.Pagina.Titulo</span>
+                                                        </a>
+                                                    </li>
 
+                                                }
+                                                else
+                                                {
+                                                    <li class="nav-li">
+                                                        <a asp-controller="@opag.Pagina.Controlador" asp-action="@opag.Pagina.Accion">
+                                                            <span class="sub-item">@opag.Pagina.Titulo</span>
+                                                        </a>
+                                                    </li>
+                                                } 
+
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a data-toggle="collapse" href="#@menu.Nombre">
+                                        @if (menu.Nombre == "Mantenimiento")
+                                        {
+                                            <i class="fas fa-address-book"></i>
+                                        }
+                                        @if (menu.Nombre == "Administracion")
+                                        {
+                                            <i class="fas fa-layer-group"></i>
+                                        }
+                                        @if (menu.Nombre == "Control")
+                                        {
+                                            <i class="far fa-calendar-alt"></i>
+                                        }
+                                        @*<i class="far fa-calendar-alt"></i>*@
+                                        <p>@menu.Titulo</p>
+                                        <span class="caret"></span>
+                                    </a>
+                                    <div class="collapse" id="@menu.Nombre">
+                                        <ul class="nav nav-collapse">
+
+                                            @foreach (var opag in menu.PaginaRol)
+                                            {                                              
+                                                <li class="nav-li">
+                                                    <a asp-controller="@opag.Pagina.Controlador" asp-action="@opag.Pagina.Accion">
+                                                        <span class="sub-item">@opag.Pagina.Titulo</span>
+                                                    </a>
+                                                </li>                                              
+                                            }
+                                            @*<li class="nav-li">
+                                                <a asp-controller="Reunion" asp-action="Index">
+                                                    <span class="sub-item">Asistencia</span>
+                                                </a>
+                                            </li>*@
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+
+                    }
                 }
 
-                @*---------------Menu Administracion----------------*@
-                @if (ViewData["Menu"].ToString() == "Administracion")
-                {
-                    <li class="nav-item active submenu">
-                        <a data-toggle="collapse" href="#administracion">
-                            <i class="fas fa-layer-group"></i>
-                            <p>Administración</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse show" id="administracion">
-                            <ul class="nav nav-collapse">
-                                @if (ViewData["Controlador"].ToString() == "Asignacion")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="Asignacion" asp-action="Index">
-                                            <span class="sub-item">Asignación de Grupo</span>
-                                        </a>
-                                    </li>
-
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="Asignacion" asp-action="Index">
-                                            <span class="sub-item">Asignación de Grupo</span>
-                                        </a>
-                                    </li>
-                                }
-
-                                @if (ViewData["Controlador"].ToString() == "AsignacionGrupoFase")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="AsignacionGrupoFase" asp-action="Index">
-                                            <span class="sub-item">Asignación de Fase</span>
-                                        </a>
-                                    </li>
-
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="AsignacionGrupoFase" asp-action="Index">
-                                            <span class="sub-item">Asignación de Fase</span>
-                                        </a>
-                                    </li>
-                                }
-
-                            </ul>
-                        </div>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a data-toggle="collapse" href="#administracion">
-                            <i class="fas fa-layer-group"></i>
-                            <p>Administración</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="administracion">
-                            <ul class="nav nav-collapse">
-                                <li class="nav-li">
-                                    <a asp-controller="Asignacion" asp-action="Index">
-                                        <span class="sub-item">Asignación de Grupo</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-li">
-                                    <a asp-controller="AsignacionGrupoFase" asp-action="Index">
-                                        <span class="sub-item">Asignación de Fase </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                }
-
-                @*---------------Menu CONTROL----------------*@
-
-                @if (ViewData["Menu"].ToString() == "Control")
-                {
-                    <li class="nav-item active submenu">
-                        <a data-toggle="collapse" href="#control">
-                            <i class="far fa-calendar-alt"></i>
-                            <p>Control</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse show" id="control">
-                            <ul class="nav nav-collapse">
-                                @if (ViewData["Controlador"].ToString() == "Reunion")
-                                {
-                                    <li class="nav-li active">
-                                        <a asp-controller="Reunion" asp-action="Index">
-                                            <span class="sub-item">Asistencia</span>
-                                        </a>
-                                    </li>
-
-                                }
-                                else
-                                {
-                                    <li class="nav-li">
-                                        <a asp-controller="Reunion" asp-action="Index">
-                                            <span class="sub-item">Asistencia</span>
-                                        </a>
-                                    </li>
-                                }
-
-                            </ul>
-                        </div>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a data-toggle="collapse" href="#control">
-                            <i class="far fa-calendar-alt"></i>
-                            <p>Control</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="control">
-                            <ul class="nav nav-collapse">
-                                <li class="nav-li">
-                                    <a asp-controller="Reunion" asp-action="Index">
-                                        <span class="sub-item">Asistencia</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                }
+                
 
             </ul>
         </div>

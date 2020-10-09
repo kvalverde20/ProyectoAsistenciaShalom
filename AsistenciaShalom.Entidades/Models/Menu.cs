@@ -14,6 +14,7 @@ namespace AsistenciaShalom.Entidades.Models
 
         [Key]
         public int IdMenu { get; set; }
+        public string Nombre { get; set; }
         public string Titulo { get; set; }
         public bool? Estado { get; set; }
 

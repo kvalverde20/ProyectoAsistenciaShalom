@@ -28,6 +28,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             Usuario = new UsuarioRepositorio(_db);
             UsuarioRol = new UsuarioRolRepositorio(_db);
             Rol = new RolRepositorio(_db);
+            PaginaRol = new PaginaRolRepositorio(_db);
+            Menu = new MenuRepositorio(_db);
         }
 
         public IPersonaRepositorio Persona { get; private set; }
@@ -43,6 +45,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
         public IUsuarioRepositorio Usuario { get; private set; }
         public IUsuarioRolRepositorio UsuarioRol { get; private set; }
         public IRolRepositorio Rol { get; private set; }
+        public IPaginaRolRepositorio PaginaRol { get; private set; }
+        public IMenuRepositorio Menu { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

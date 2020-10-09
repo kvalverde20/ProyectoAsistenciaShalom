@@ -6,8 +6,8 @@ using System.Text;
 
 namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
 {
-    public interface IMenuRepositorio : IRepositorio<Menu>
+    public interface IPaginaRolRepositorio : IRepositorio<PaginaRol>
     {
-        IEnumerable<MenuDto> GetListaMenu(int idRol);
+        IEnumerable<PaginaRolDto> GetListaPaginaRol(int idRol, int idMenu);
     }
 }

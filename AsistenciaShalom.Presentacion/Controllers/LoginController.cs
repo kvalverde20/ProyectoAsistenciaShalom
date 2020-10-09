@@ -38,16 +38,27 @@ namespace AsistenciaShalom.Presentacion.Controllers
                 string clavecifrada = GetDecrypter().Encrypt(password);
                 var ent = _contenedorTrabajo.Usuario.GetFirstOrDefault(x =>x.Username == username
                                         && x.Contrasena== clavecifrada);
+            
                 if(ent != null)
                 {
                     rpta = true;
                     var usuarioDto = _contenedorTrabajo.Usuario.GetDatosGeneralesXIdUsuario(ent.IdUsuario);
+                    var listaMenu = _contenedorTrabajo.Menu.GetListaMenu(usuarioDto.IdRol).ToList();
+
+                    foreach (var item in listaMenu)
+                    {
+                        item.PaginaRol = _contenedorTrabajo.PaginaRol.GetListaPaginaRol(usuarioDto.IdRol, item.IdMenu).ToList();
+                    }
+
+                    Generico.listaMenu = listaMenu;
 
                     HttpContext.Session.SetString("usuario", ent.IdUsuario.ToString());
                     HttpContext.Session.SetString("username", ent.Username.ToString());
                     HttpContext.Session.SetString("nombreCompletoPersona", usuarioDto.NombreCompletoPersona.ToString());
                     HttpContext.Session.SetString("nombreGrupo", usuarioDto.NombreGrupo.ToString());
                     HttpContext.Session.SetString("nombreRol", usuarioDto.NombreRol.ToString());
+                    HttpContext.Session.SetString("idRol", usuarioDto.IdRol.ToString());
+                    //HttpContext.Session.("flagVisible", usuarioDto.Estado.ToString());
                 }
                 
             }
@@ -66,6 +77,8 @@ namespace AsistenciaShalom.Presentacion.Controllers
             HttpContext.Session.Remove("nombreCompletoPersona");
             HttpContext.Session.Remove("nombreGrupo");
             HttpContext.Session.Remove("nombreRol");
+            HttpContext.Session.Remove("idRol");
+            //HttpContext.Session.Remove("flagVisible");
 
             return RedirectToAction(nameof(Index));
         }

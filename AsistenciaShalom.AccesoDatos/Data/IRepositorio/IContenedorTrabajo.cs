@@ -19,6 +19,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         IUsuarioRepositorio Usuario { get; }
         IUsuarioRolRepositorio UsuarioRol { get; }
         IRolRepositorio Rol { get; }
+        IPaginaRolRepositorio PaginaRol { get; }
+        IMenuRepositorio Menu { get; }
         void Save();
     }
 }
