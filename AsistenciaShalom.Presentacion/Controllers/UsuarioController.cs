@@ -56,6 +56,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             try
             {
                 CargaCombo();
+                ViewBag.MostrarError = false;
             }
             catch (Exception ex)
             {
@@ -95,12 +96,23 @@ namespace AsistenciaShalom.Presentacion.Controllers
         {
             try
             {
+                int nveces = 0;
                 CargaCombo();
-                if (ModelState.IsValid)
+                usuarioRolDto.MostrarError = false;
+                ViewBag.MostrarError = usuarioRolDto.MostrarError;
+
+                using (var transaccion = new TransactionScope())
                 {
-                    using (var transaccion = new TransactionScope())
+                    if (usuarioRolDto.IdUsuarioRol == 0)
                     {
-                        if (usuarioRolDto.IdUsuarioRol == 0)
+                       
+                        if(usuarioRolDto.Username != null)
+                        {
+                            // Validamos si ya existe el username en la BD
+                            nveces = _contenedorTrabajo.Usuario.GetAll(x => x.Username == usuarioRolDto.Username).Count();
+                        }
+
+                        if (ModelState.IsValid)
                         {
                             var usuarioDto = new UsuarioDto()
                             {
@@ -114,12 +126,10 @@ namespace AsistenciaShalom.Presentacion.Controllers
                                 FechaCreacion = DateTime.Now
                             };
 
-                            // Validamos si ya existe el username en la BD
-                            var nveces = _contenedorTrabajo.Usuario.GetAll(x => x.Username == usuarioDto.Username).Count();
-
                             if (nveces != 0)
                             {
-                                usuarioRolDto.mensajeError = "El Username ya existe";
+                                usuarioRolDto.MostrarError = true;
+                                ViewBag.MostrarError = usuarioRolDto.MostrarError;
                                 return View(usuarioRolDto);
                             }
 
@@ -140,10 +150,18 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
                             return Json(new { success = true });
                         }
+                        else
+                        {
+                            if (nveces != 0)
+                            {
+                                usuarioRolDto.MostrarError = true;
+                                ViewBag.MostrarError = usuarioRolDto.MostrarError;
+                                return View(usuarioRolDto);
+                            }
+                        }                 
                     }
-
-                        
                 }
+
             }
             catch (Exception ex)
             {
@@ -161,7 +179,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             try
             {
                 CargaCombo();
-
+                ViewBag.MostrarError = false;
                 usuarioRolDto = _contenedorTrabajo.UsuarioRol.GetUsuarioRolPorId(id);
 
             }
@@ -181,12 +199,28 @@ namespace AsistenciaShalom.Presentacion.Controllers
             try
             {
                 CargaCombo();
+                var flgAct = false;
+                usuarioRolDto.MostrarError = false;
+                ViewBag.MostrarError = usuarioRolDto.MostrarError;
 
-                if (ModelState.IsValid)
+                using (var transaccion = new TransactionScope())
                 {
-                    using (var transaccion = new TransactionScope())
+                    if (usuarioRolDto.IdUsuarioRol != 0)
                     {
-                        if (usuarioRolDto.IdUsuarioRol != 0)
+                        if (usuarioRolDto.Username != null)
+                        {
+                            var oUsuario = _contenedorTrabajo.Usuario.GetAll(x => x.Username.Trim() == usuarioRolDto.Username.Trim()).FirstOrDefault();
+                            var usernameDB = _contenedorTrabajo.Usuario.Get(usuarioRolDto.IdUsuario).Username;
+                            if (oUsuario != null)  // Si el objeto existe en la BD
+                            {
+                                if (oUsuario.Username.ToUpper().Trim() != usernameDB.ToUpper().Trim())
+                                { //  se ha cambiado el username
+                                    flgAct = true;
+                                }
+                            }
+                        }
+
+                        if (ModelState.IsValid)
                         {
                             var usuarioDto = new UsuarioDto()
                             {
@@ -194,6 +228,13 @@ namespace AsistenciaShalom.Presentacion.Controllers
                                 Username = usuarioRolDto.Username,
                                 UsuarioActualizacion = HttpContext.Session.GetString("username")
                             };
+
+                            if (flgAct)
+                            {
+                                usuarioRolDto.MostrarError = true;
+                                ViewBag.MostrarError = usuarioRolDto.MostrarError;
+                                return View(usuarioRolDto);
+                            }
 
                             // Actualizar Usuario
                             var entUsuario = _mapper.Map<Usuario>(usuarioDto);
@@ -205,16 +246,26 @@ namespace AsistenciaShalom.Presentacion.Controllers
                             _contenedorTrabajo.UsuarioRol.Update(entUsuarioRol);
                             _contenedorTrabajo.Save();
                             transaccion.Complete();
-                        }                    
-                        return Json(new { success = true }); ;
-                    }
+                            return Json(new { success = true });
+                        }
+                        else
+                        {
+                            if (flgAct)
+                            {
+                                usuarioRolDto.MostrarError = true;
+                                ViewBag.MostrarError = usuarioRolDto.MostrarError;
+                                return View(usuarioRolDto);
+                            }
+                        }                      
+                    }                    
+                   
                 }
+                
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
             return View(usuarioRolDto);
         }
 

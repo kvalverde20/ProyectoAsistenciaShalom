@@ -7,6 +7,7 @@
     ViewData["Menu"] = "Mantenimiento";
     ViewData["Controlador"] = "Usuario";
     List<SelectListItem> listaRoles = ViewBag.listaRoles;
+    var mostrarError = ViewBag.MostrarError;
 }
 
 <form asp-controller="Usuario" asp-action="Agregar" method="post" id="frmEnviar">
@@ -32,15 +33,16 @@
                     <div class="form-group" id="divPersona">
                         <label>Persona</label>
                         <div class="input-group">
-                            <input type="hidden" id="txtIdPersonaPopup" class="enviar form-control" name="iidPersona" />
-                            <input type="text" asp-for="IdPersona" readonly class="form form-control" id="txtNombrePersonaPopup" />
+                            <input type="hidden" asp-for="IdPersona" id="txtIdPersonaPopup" class="enviar form-control" name="iidPersona" />
+                            <input type="text" asp-for="NombrePersona" readonly class="form form-control" id="txtNombrePersonaPopup" />
                             <div class="input-group-append">
                                 <button id="btnBuscar" class="btn btn-danger" data-toggle="modal" data-target="#modal">
                                     Buscar
                                 </button>
                             </div>
-                            <span asp-validation-for="IdPersona" class="text-danger"></span>
+                            @*<span asp-validation-for="IdPersona" class="text-danger"></span>*@
                         </div>
+                        <span asp-validation-for="NombrePersona" class="text-danger"></span>
                     </div>
                 </div>
                 @*<div class="col-lg-6 col-md-6 col-sm-12">
@@ -55,12 +57,11 @@
                     <div class="form-group">
                         <label asp-for="Username"></label>
                         <input id="txtUsername" asp-for="Username" class="form form-control" maxlength="20" />
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                        <div id="log"></div>
-                        @*@if ( Model.mensajeError != "" || Model.mensajeError != null)
+                        <span asp-validation-for="Username" class="text-danger"></span>                       
+                        @if (mostrarError)
                             {
-                                <p class="text-danger">El Username ya existe</p>
-                            }*@
+                                <span class="text-danger">Este Username ya existe</span>
+                            }
                     </div>
                 </div>
 
@@ -185,7 +186,8 @@
             var frmEnviar = document.getElementById("frmEnviar");
 
             //var idpersona = $('#txtIdPersona').val();  
-            var idpersona = $('#txtIdPersonaPopup').val();
+            var idpersona = $('#txtIdPersonaPopup').val() == null ? 0 : $('#txtIdPersonaPopup').val();
+            var nombrepersona = $('#txtNombrePersonaPopup').val();
             var username = $('#txtUsername').val();
             var contrasena = $('#txtContrasena').val();
             var idrol = $('#ddlRoles option:selected').val();
@@ -193,13 +195,14 @@
 
             var frm = new FormData();
             frm.append("IdPersona", idpersona);
+            frm.append("NombrePersona", nombrepersona);
             frm.append("Username", username);
             frm.append("Contrasena", contrasena);
             frm.append("ContrasenaRepetida", contrasenarepetida);
             frm.append("IdRol", idrol);
 
             if (contrasena != contrasenarepetida) {
-                error("La contraseña debe ser la misma");
+                error("Las contraseñas no coinciden!");
                 return;
             }
 

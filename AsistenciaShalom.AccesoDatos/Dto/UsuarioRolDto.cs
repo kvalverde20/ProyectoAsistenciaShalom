@@ -36,13 +36,15 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         public string ContrasenaRepetida { get; set; }
 
 
+        [Required(ErrorMessage = "La Persona es obligatorio")]
+        [Display(Name = "Persona")]
         public string NombrePersona { get; set; }
         public string ApellidosPersona { get; set; }
 
         [Display(Name = "Nombre Completo")]
         public string NombreCompleto{ get; set; }
         public string NombreRol { get; set; }
-        public string mensajeError { get; set; }
+        public bool MostrarError { get; set; }
         
     }
 }

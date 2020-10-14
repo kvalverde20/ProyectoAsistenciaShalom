@@ -9,6 +9,7 @@
     ViewData["Controlador"] = "Grupo";
 
     List<SelectListItem> listaTipoGrupo = ViewBag.listaTipoGrupo;
+    var mostrarError = ViewBag.MostrarError;
 }
 
 <form asp-controller="Grupo" asp-action="Editar" method="post" id="frmEnviar">
@@ -36,6 +37,10 @@
                         <label asp-for="Nombre"></label>
                         <input id="txtNombre" asp-for="Nombre" class="form form-control" maxlength="50" />
                         <span asp-validation-for="Nombre" class="text-danger"></span>
+                        @if (mostrarError)
+                        {
+                            <span class="text-danger">Este nombre de Grupo de oración ya existe</span>
+                        }
                     </div>
                 </div>
 

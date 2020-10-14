@@ -58,7 +58,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                     HttpContext.Session.SetString("nombreGrupo", usuarioDto.NombreGrupo.ToString());
                     HttpContext.Session.SetString("nombreRol", usuarioDto.NombreRol.ToString());
                     HttpContext.Session.SetString("idRol", usuarioDto.IdRol.ToString());
-                    //HttpContext.Session.("flagVisible", usuarioDto.Estado.ToString());
+                    HttpContext.Session.SetString("idGrupo", usuarioDto.IdGrupo.ToString());
                 }
                 
             }
@@ -78,7 +78,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             HttpContext.Session.Remove("nombreGrupo");
             HttpContext.Session.Remove("nombreRol");
             HttpContext.Session.Remove("idRol");
-            //HttpContext.Session.Remove("flagVisible");
+            HttpContext.Session.Remove("idGrupo");
 
             return RedirectToAction(nameof(Index));
         }

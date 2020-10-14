@@ -9,6 +9,7 @@ using AsistenciaShalom.Entidades.Models;
 using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -37,7 +38,19 @@ namespace AsistenciaShalom.Presentacion.Controllers
             List<GrupoDto> lista = new List<GrupoDto>();
             try
             {
-                lista = _contenedorTrabajo.Grupo.GetGruposActivos().ToList();
+                var idrol = int.Parse(HttpContext.Session.GetString("idRol"));
+                var idgrupo = int.Parse(HttpContext.Session.GetString("idGrupo"));
+
+                if (idrol == 1)  // id=1 (Administrador)
+                {
+                    lista = _contenedorTrabajo.Grupo.GetGruposActivos().ToList();
+                }
+                else // Roles Pastor y núcleo
+                {
+                    var obj = _contenedorTrabajo.Grupo.GetGrupoPorId(idgrupo);
+                    lista.Add(obj);
+                }
+
             }
             catch (Exception ex)
             {

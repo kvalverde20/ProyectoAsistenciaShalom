@@ -8,6 +8,7 @@ using AsistenciaShalom.Entidades.Models;
 using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -52,6 +53,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             try
             {
                 CargaCombo();
+                ViewBag.MostrarError = false;
             }
             catch (Exception ex)
             {
@@ -66,25 +68,49 @@ namespace AsistenciaShalom.Presentacion.Controllers
         {
             try
             {
+                int cont = 0;
                 CargaCombo();
-                if (ModelState.IsValid)
+                grupoDto.MostrarError = false;
+                ViewBag.MostrarError = grupoDto.MostrarError;
+
+                if (grupoDto.IdGrupo == 0)
                 {
-                    if (grupoDto.IdGrupo == 0)
+                    if (grupoDto.Nombre != null)
                     {
-                        //personaDto.PaisOrigen = personaDto.PaisOrigen == null ? "" : personaDto.PaisOrigen;
-                        //personaDto.NombreCompletoAcompanador = personaDto.NombreCompletoAcompanador == null ? "" : personaDto.NombreCompletoAcompanador;
+                        cont = _contenedorTrabajo.Grupo.GetGrupoPorNombre(grupoDto.Nombre).Count();
+                    }
+
+                    if (ModelState.IsValid)
+                    {
                         grupoDto.Estado = true;
-                        grupoDto.UsuarioCreacion = "kmvalver";
+                        grupoDto.UsuarioCreacion = HttpContext.Session.GetString("username");
                         grupoDto.FechaCreacion = DateTime.Now;
                         grupoDto.EstadoAsignacionFase = "N";
+
+                        if (cont != 0)
+                        {
+                            grupoDto.MostrarError = true;
+                            ViewBag.MostrarError = grupoDto.MostrarError;
+                            return View(grupoDto);
+                        }
 
                         var entidad = _mapper.Map<Grupo>(grupoDto);
                         _contenedorTrabajo.Grupo.Add(entidad);
                         _contenedorTrabajo.Save();
 
-                        return Json(new { success = true }); ;
+                        return Json(new { success = true });
                     }
+                    else
+                    {
+                        if (cont != 0)
+                        {
+                            grupoDto.MostrarError = true;
+                            ViewBag.MostrarError = grupoDto.MostrarError;
+                            return View(grupoDto);
+                        }
+                    }                      
                 }
+                
             }
             catch (Exception ex)
             {
@@ -117,6 +143,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             try
             {
                 CargaCombo();
+                ViewBag.MostrarError = false;
 
                 if (id != null)
                 {
@@ -136,24 +163,56 @@ namespace AsistenciaShalom.Presentacion.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public IActionResult Editar(GrupoDto grupoDto)   // Guardar actualizacion
         {
             try
             {
                 CargaCombo();
-
-                if (ModelState.IsValid)
+                var oGrupo = new GrupoDto();
+                var flgAct = false;
+                grupoDto.MostrarError = false;
+                ViewBag.MostrarError = grupoDto.MostrarError;
+     
+                if (grupoDto.IdGrupo != 0)
                 {
-                    if (grupoDto.IdGrupo != 0)
+                    if (grupoDto.Nombre != null)
                     {
+                        oGrupo = _contenedorTrabajo.Grupo.GetGrupoPorNombre(grupoDto.Nombre).FirstOrDefault();
+                        var nombreBD = _contenedorTrabajo.Grupo.GetGrupoPorId(grupoDto.IdGrupo).Nombre;
+                        if(oGrupo != null)  // Si el nombre existe en la BD
+                        {
+                            if (oGrupo.Nombre.ToUpper().Trim() != nombreBD.ToUpper().Trim())
+                            { //  se ha cambiado el nombre
+                                flgAct = true;
+                            }
+                        }               
+                    }
+
+                    if (ModelState.IsValid)
+                    {
+                        if (flgAct)
+                        {
+                            grupoDto.MostrarError = true;
+                            ViewBag.MostrarError = grupoDto.MostrarError;
+                            return View(grupoDto);
+                        }
+                        grupoDto.UsuarioActualizacion = HttpContext.Session.GetString("username");
                         var entidad = _mapper.Map<Grupo>(grupoDto);
                         _contenedorTrabajo.Grupo.Update(entidad);
                         _contenedorTrabajo.Save();
 
-                        return Json(new { success = true }); ;
+                        return Json(new { success = true });
                     }
-                }
+                    else
+                    {
+                        if (flgAct)
+                        {
+                            grupoDto.MostrarError = true;
+                            ViewBag.MostrarError = grupoDto.MostrarError;
+                            return View(grupoDto);
+                        }
+                    }            
+                }               
             }
             catch (Exception ex)
             {

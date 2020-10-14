@@ -37,7 +37,7 @@
                             <th style="display:none">@Html.DisplayNameFor(model => model.IdGrupo)</th>
                             <th>@Html.DisplayNameFor(model => model.Nombre)</th>
                             <th>@Html.DisplayNameFor(model => model.FechaInicioTexto)</th>
-                            <th>@Html.DisplayNameFor(model => model.FechaFinTexto)</th>
+                            @*<th>@Html.DisplayNameFor(model => model.FechaFinTexto)</th>*@
                             <th>@Html.DisplayNameFor(model => model.DiaReunion)</th>
                             <th>@Html.DisplayNameFor(model => model.Horario)</th>
                             <th>@Html.DisplayNameFor(model => model.TipoGrupoTexto)</th>
@@ -72,23 +72,25 @@
         window.onload = function () {
 
             var url = "Grupo/ListarGrupos";  //  controller/Metodo
-            pintar(url, ["idGrupo", "nombre", "fechaInicioTexto", "fechaFinTexto", "diaReunion", "horario","tipoGrupoTexto"],
+            pintar(url, ["idGrupo", "nombre", "fechaInicioTexto", "diaReunion", "horario","tipoGrupoTexto"],
                 "idGrupo", "Grupo");
         }
 
 
         function Eliminar(id) {
 
-            //document.getElementById("hdnIdPersona").value = id;
             mostrarModalConfirmacion("Eliminar Grupo", "¿Está seguro de eliminar este grupo?").then(res => {
 
                 if (res.value) {
                     $.get("Grupo/Eliminar/?id=" + id, function (rpta) {
 
                         if (rpta) {
-                            correcto("El grupo se eliminó correctamente");
-                            var frmEnviar = document.getElementById("frmEnviar");
-                            frmEnviar.submit();
+                            var url = "Grupo/ListarGrupos";
+                            pintar(url, ["idGrupo", "nombre", "fechaInicioTexto", "diaReunion", "horario", "tipoGrupoTexto"],
+                                            "idGrupo", "Grupo");
+                            correcto("El Grupo se eliminó correctamente");
+                            //var frmEnviar = document.getElementById("frmEnviar");
+                            //frmEnviar.submit();
                         } else {
                             error("Ocurrió un error al eliminar");
                         }

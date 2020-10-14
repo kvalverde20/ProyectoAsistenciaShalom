@@ -18,6 +18,31 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             _db = db;
         }
 
+        public IEnumerable<GrupoDto> GetGrupoPorNombre(string nombre)
+        {
+            var grupo = _db.Grupo;
+            var multitabla = _db.Multitabla;
+
+            var lista = from g in grupo.Where(x => x.Estado == true && x.Nombre.ToUpper().Trim() == nombre.ToUpper().Trim())
+                        join mi in multitabla on g.TipoGrupo equals mi.IdMultitabla
+                        select new GrupoDto
+                        {
+                            IdGrupo = g.IdGrupo,
+                            Nombre = g.Nombre,
+                            FechaInicio = g.FechaFin,
+                            FechaFin = g.FechaFin,
+                            DiaReunion = g.DiaReunion,
+                            Horario = g.Horario,
+                            TipoGrupoTexto = mi.MultitablaDescripcion,
+                            FechaInicioTexto = g.FechaInicio.Value.ToShortDateString(),
+                            FechaFinTexto = g.FechaFin.Value.ToShortDateString(),
+                            EstadoAsignacionFase = g.EstadoAsignacionFase
+                        };
+
+            return lista.AsEnumerable();
+
+        }
+
         public IEnumerable<GrupoDto> GetGruposActivos()
         {
             var grupo = _db.Grupo;
@@ -34,8 +59,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             DiaReunion = g.DiaReunion,
                             Horario = g.Horario,
                             TipoGrupoTexto = mi.MultitablaDescripcion,
-                            FechaInicioTexto = g.FechaInicio.Value.ToShortDateString(),
-                            FechaFinTexto = g.FechaFin.Value.ToShortDateString(),
+                            FechaInicioTexto = g.FechaInicio == null ? "" : g.FechaInicio.Value.ToShortDateString(),
+                            FechaFinTexto = g.FechaFin == null ? "" : g.FechaFin.Value.ToShortDateString(),
                             EstadoAsignacionFase = g.EstadoAsignacionFase
                             
                         };
@@ -80,7 +105,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             objDesdeDb.TipoGrupo = grupo.TipoGrupo;
             objDesdeDb.Horario = grupo.Horario;
             objDesdeDb.Estado = true;
-            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.UsuarioActualizacion = grupo.UsuarioActualizacion;
             objDesdeDb.FechaActualizacion = DateTime.Now;
         }
 

@@ -11,6 +11,8 @@ namespace AsistenciaShalom.AccesoDatos.Dto
 
         public int IdGrupo { get; set; }
 
+
+        [Required(ErrorMessage = "El Nombre del Grupo es obligatorio")]
         public string Nombre { get; set; }
 
         [Display(Name = "Descripción")]
@@ -19,6 +21,7 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         [DataType(DataType.Date, ErrorMessage = "El formato de fecha no es correcto")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha Inicio")]
+        [Required(ErrorMessage = "La Fecha de Inicio es obligatorio")]
         public DateTime? FechaInicio { get; set; }
 
         [DataType(DataType.Date, ErrorMessage = "El formato de fecha no es correcto")]
@@ -48,6 +51,7 @@ namespace AsistenciaShalom.AccesoDatos.Dto
 
         [Display(Name = "Fecha Fin")]
         public string FechaFinTexto { get; set; }
+        public bool MostrarError { get; set; }
 
 
     }

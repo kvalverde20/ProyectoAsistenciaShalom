@@ -8,6 +8,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
 {
     public interface IGrupoRepositorio : IRepositorio<Grupo>
     {
+        IEnumerable<GrupoDto> GetGrupoPorNombre(string nombre);
         IEnumerable<GrupoDto> GetGruposActivos();
         GrupoDto GetGrupoPorId(int idGrupo);
         void Update(Grupo grupo);

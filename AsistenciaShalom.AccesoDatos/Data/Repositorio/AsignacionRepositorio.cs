@@ -74,19 +74,26 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             var asignacion = _db.Asignacion;
             var persona = _db.Persona;
             var grupo = _db.Grupo;
+            var multitabla = _db.Multitabla;
 
             var lista = from a in asignacion.Where(x => x.Estado == true && x.Cargo == "0301" && x.IdGrupo == idgrupo)
                            join p in persona.Where(x => x.Estado == true) on a.IdPersona equals p.IdPersona
-                           //join g in grupo.Where(x => x.Estado == true) on a.IdGrupo equals g.IdGrupo
+                           join g in grupo.Where(x => x.Estado == true) on a.IdGrupo equals g.IdGrupo
+                           join mi in multitabla on a.Cargo equals mi.IdMultitabla
 
-                           select new AsignacionDto
+                        select new AsignacionDto
                            {
                                IdAsignacion = a.IdAsignacion,
                                IdPersona = a.IdPersona,
                                NombresPersona = p.Nombres,
-                               ApellidosPersona = p.Apellidos
-                               
-                           };
+                               ApellidosPersona = p.Apellidos,
+                               NombresCompleto = p.Nombres + " " + p.Apellidos,
+                               NombreGrupo = g.Nombre,
+                               FechaIngresoTexto = a.FechaIngreso.Value.ToShortDateString(),
+                               FechaSalidaTexto = a.FechaSalida.Value.ToShortDateString(),
+                               FormaIngreso = a.FormaIngreso,
+                               CargoTexto = mi.MultitablaDescripcion
+                        };
 
             return lista.AsEnumerable();
         }

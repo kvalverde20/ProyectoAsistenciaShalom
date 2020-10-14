@@ -19,7 +19,7 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         [Required(ErrorMessage = "El Nombre es obligatorio")]
         public string Nombres { get; set; }
 
-        [Required(ErrorMessage = "Los Apellidos es obligatorio")]
+        [Required(ErrorMessage = "Los Apellidos son obligatorio")]
         public string Apellidos { get; set; }
 
         //[Required(ErrorMessage = "El País de origen es obligatorio")]
