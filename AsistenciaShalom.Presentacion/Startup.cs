@@ -41,7 +41,7 @@ namespace FirstAppNetCore
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddHttpContextAccessor();
             services.AddRazorPages();
-            services.AddSession();
+            services.AddSession( options => { options.IdleTimeout = TimeSpan.FromMinutes(10); } );
             services.AddScoped<Seguridad>();
         }
 

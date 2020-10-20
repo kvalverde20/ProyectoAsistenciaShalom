@@ -9,6 +9,7 @@ using AsistenciaShalom.Entidades.Models;
 using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -119,7 +120,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                             asignacion.FechaIngreso = asignacion.FechaIngreso == null ? DateTime.Now : asignacion.FechaIngreso;
                             asignacion.FormaIngreso = asignacion.FormaIngreso == null ? "" : asignacion.FormaIngreso;
                             asignacion.Estado = true;
-                            asignacion.UsuarioCreacion = "kmvalver";
+                            asignacion.UsuarioCreacion = HttpContext.Session.GetString("username");
                             asignacion.FechaCreacion = DateTime.Now;
 
                             var entidad = _mapper.Map<Asignacion>(asignacion);

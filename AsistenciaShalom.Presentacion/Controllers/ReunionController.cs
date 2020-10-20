@@ -252,7 +252,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                 reunionDto = _mapper.Map<ReunionDto>(reunion);
                 reunionDto.FechaReunionTexto = reunion.FechaReunion.Value.ToShortDateString();
 
-                var listAsistenciasDto = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunion(id).ToList();  // id = idReunion
+                var listAsistenciasDto = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunionHistorico(id).ToList();  // id = idReunion
                 reunionDto.ListaAsistencias = listAsistenciasDto;
 
             }
@@ -273,7 +273,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             {
                 var reunion = _contenedorTrabajo.Reunion.Get(id);
                 reunionDto = _mapper.Map<ReunionDto>(reunion);
-                var lista = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunion(id).ToList();
+                var lista = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunionHistorico(id).ToList();
                 reunionDto.ListaAsistencias = lista;
 
             }
@@ -309,7 +309,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                 //--------- Asistencias --------------
                 using (var transaccion = new TransactionScope())
                 {
-                    var listaAsistencia = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunion(idreunion).ToList();
+                    var listaAsistencia = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunionHistorico(idreunion).ToList();
 
                     foreach (var asistenciaDto in listaAsistencia)
                     {

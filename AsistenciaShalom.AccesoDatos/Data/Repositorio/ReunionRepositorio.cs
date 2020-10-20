@@ -125,6 +125,31 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             return lista.AsEnumerable();
         }
 
+        public IEnumerable<AsistenciaDto> ListarAsistenciasPorReunionHistorico(int idReunion)
+        {
+            var asistencia = _db.Asistencia;
+            var asignacion = _db.Asignacion;
+            var persona = _db.Persona;
+
+            var lista = from a in asistencia.Where(x => x.IdReunion == idReunion)
+                        join b in asignacion on a.IdAsignacion equals b.IdAsignacion
+                        join p in persona.Where(x => x.Estado == true) on b.IdPersona equals p.IdPersona
+
+                        select new AsistenciaDto
+                        {
+                            IdAsistencia = a.IdAsistencia,
+                            IdReunion = a.IdReunion,
+                            IdAsignacion = a.IdAsignacion,
+                            IdPersona = p.IdPersona,
+                            NombresPersona = p.Nombres,
+                            ApellidosPersona = p.Apellidos,
+                            FlagAsistencia = a.FlagAsistencia,
+                            Comentario = a.Comentario
+                        };
+
+            return lista.AsEnumerable();
+        }
+
         public void Update(Reunion reunion)
         {
             var objDesdeDb = _db.Reunion.FirstOrDefault(s => s.IdReunion == reunion.IdReunion);

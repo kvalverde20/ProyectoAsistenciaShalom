@@ -42,7 +42,7 @@
                             <th>@Html.DisplayNameFor(model => model.NombresCompleto)</th>
                             <th>@Html.DisplayNameFor(model => model.NombreGrupo)</th>
                             <th>@Html.DisplayNameFor(model => model.FechaIngresoTexto)</th>
-                            <th>@Html.DisplayNameFor(model => model.FechaSalidaTexto)</th>
+                            @*<th>@Html.DisplayNameFor(model => model.FechaSalidaTexto)</th>*@
                             <th>@Html.DisplayNameFor(model => model.FormaIngreso)</th>
                             <th>@Html.DisplayNameFor(model => model.CargoTexto)</th>
                             <th>Acciones</th>
@@ -76,7 +76,7 @@
         window.onload = function () {
 
             var url = "PersonaGrupo/ListarPersonaGrupoTotal";
-            pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "fechaSalidaTexto", "formaIngreso","cargoTexto"],
+            pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "formaIngreso","cargoTexto"],
                 "idAsignacion", "PersonaGrupo");
             //pintarTableAsignaciones(url, ["idPersona", "nombres", "apellidos", "paisOrigen", "fechaNacimientoTexto", "ministerioTexto","comunidadTexto"],
             //    "idPersona", "Asignacion");
@@ -93,7 +93,7 @@
                         if (rpta) {
 
                             var url = "PersonaGrupo/ListarPersonaGrupoTotal";
-                            pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "fechaSalidaTexto", "formaIngreso", "cargoTexto"],
+                            pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "formaIngreso", "cargoTexto"],
                                 "idAsignacion", "PersonaGrupo");
                             correcto("La persona se eliminó correctamente");
                             //var frmEnviar = document.getElementById("frmEnviar");

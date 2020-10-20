@@ -145,13 +145,20 @@
             var confcontrasena = $('#txtConfirmarContrasena').val();
             //var idusuario = $('#hdnIdUsuario').val();
 
-            if (nuevacontrasena != confcontrasena) {
-                toastr.error("Las contraseñas no coinciden", "ERROR", {
-                    "progressBar": true,
-                    "showDuration": "1"
+            if (nuevacontrasena.length > 6) {
+                if (nuevacontrasena != confcontrasena) {
+                    toastr.error("Las contraseñas no coinciden", "ERROR", {
+                        "progressBar": true
+                    });
+                    return;
+                }
+            } else {
+                toastr.warning("La contraseña debe de tener más de 6 dígitos", "ADVERTENCIA", {
+                    "progressBar": true
                 });
                 return;
             }
+            
 
             var frm = new FormData();
             //enviar(frm);

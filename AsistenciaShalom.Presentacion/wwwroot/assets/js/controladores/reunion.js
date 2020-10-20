@@ -41,8 +41,8 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 			if (data[i].estadoRegistroAsistencia == true) {
 
 				contenido += `
-							<td  style="justify-content: center; display: flex;>
-								<div class="form-button-action"> `
+							<td  style="justify-content: center; display: table-cell; text-align: center;">
+								<div class="form-button-action">`
 				contenido += `<a  
 								href="${nombreController}/Ver/${objetoActual[propiedadId]}" data-toggle="tooltip" data-placement="top" data-original-title="Asignado"
 								class="btn btn-link btn-default btn-lg">
@@ -55,8 +55,8 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 								</a>`
 			} else {
 				contenido += `
-							<td  style="justify-content: center; display: flex;>
-								<div class="form-button-action"> `
+							<td  style="justify-content: center; display: table-cell; text-align: center;">
+								<div class="form-button-action">`
 				contenido += `<a type="button" 
 								href="${nombreController}/Asistencia/${objetoActual[propiedadId]}" data-toggle="tooltip"
 								class="btn btn-link btn-success btn-lg" data-original-title="Registrar Asistencia" >

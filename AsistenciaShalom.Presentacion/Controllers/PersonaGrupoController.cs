@@ -67,9 +67,21 @@ namespace AsistenciaShalom.Presentacion.Controllers
             bool rpta = false;
             try
             {
-                _contenedorTrabajo.Asignacion.LogicalDelete(id);
-                _contenedorTrabajo.Save();
-                rpta = true;
+                using (var transaccion = new TransactionScope())
+                {                  
+                    // Cambiar el estadoAsignacion a la Persona a No asignado "N"
+                    var asig = _contenedorTrabajo.Asignacion.GetAsignacionPersonaGrupo(id);
+                    var idpersona = asig.IdPersona.GetValueOrDefault();
+                    _contenedorTrabajo.Asignacion.EliminarEstadoAsignacionGrupo(idpersona);
+                    _contenedorTrabajo.Save();
+
+                    // Actualizamos el estado de la Asignacion a Inactivo se genera la Fecha de Salida
+                    _contenedorTrabajo.Asignacion.LogicalDelete(id);
+                    _contenedorTrabajo.Save();
+                    transaccion.Complete();
+                    rpta = true;
+                }
+                                    
             }
             catch (Exception ex)
             {
@@ -128,6 +140,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                     if (asignacionDto.IdAsignacion != 0)
                     {
                         var entidad = _mapper.Map<Asignacion>(asignacionDto);
+                        entidad.UsuarioActualizacion = HttpContext.Session.GetString("username");
                         _contenedorTrabajo.Asignacion.Update(entidad);
                         _contenedorTrabajo.Save();
 

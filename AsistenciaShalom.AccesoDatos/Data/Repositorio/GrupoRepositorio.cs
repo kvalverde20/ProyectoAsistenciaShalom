@@ -113,6 +113,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
         {
             var objDesdeDb = _db.Grupo.FirstOrDefault(s => s.IdGrupo == id);
             objDesdeDb.Estado = false;
+            objDesdeDb.FechaFin = DateTime.Now;
         }
 
     }

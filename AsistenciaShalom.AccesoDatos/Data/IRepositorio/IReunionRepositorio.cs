@@ -12,6 +12,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         IEnumerable<ReunionDto> GetReunionesPorGrupo(int? idGrupo);
         IEnumerable<AsistenciaDto> ListarOvejasPorGrupo(int idgrupo);
         IEnumerable<AsistenciaDto> ListarAsistenciasPorReunion(int idReunion);
+        IEnumerable<AsistenciaDto> ListarAsistenciasPorReunionHistorico(int idReunion);
         void Update(Reunion reunion);
         void UpdateEstadoAsistencia(Reunion reunion);
 

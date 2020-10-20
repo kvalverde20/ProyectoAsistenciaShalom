@@ -89,8 +89,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                                ApellidosPersona = p.Apellidos,
                                NombresCompleto = p.Nombres + " " + p.Apellidos,
                                NombreGrupo = g.Nombre,
-                               FechaIngresoTexto = a.FechaIngreso.Value.ToShortDateString(),
-                               FechaSalidaTexto = a.FechaSalida.Value.ToShortDateString(),
+                               FechaIngresoTexto = a.FechaIngreso == null ? "" : a.FechaIngreso.Value.ToShortDateString(),
+                               FechaSalidaTexto = a.FechaSalida == null ? "" : a.FechaSalida.Value.ToShortDateString(),
                                FormaIngreso = a.FormaIngreso,
                                CargoTexto = mi.MultitablaDescripcion
                         };
@@ -102,6 +102,12 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
         {
             var objDesdeDb = _db.Persona.FirstOrDefault(s => s.IdPersona == idpersona);
             objDesdeDb.EstadoAsignacionGrupo = "A";
+        }
+
+        public void EliminarEstadoAsignacionGrupo(int idpersona)
+        {
+            var objDesdeDb = _db.Persona.FirstOrDefault(s => s.IdPersona == idpersona);
+            objDesdeDb.EstadoAsignacionGrupo = "N";
         }
 
         public AsignacionDto GetAsignacionPorId(int idAsignacion)
@@ -138,8 +144,8 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             IdAsignacion = a.IdAsignacion,
                             NombresCompleto = p.Nombres + " " + p.Apellidos,
                             NombreGrupo = g.Nombre,
-                            FechaIngresoTexto = a.FechaIngreso.Value.ToShortDateString(),
-                            FechaSalidaTexto = a.FechaSalida.Value.ToShortDateString(),
+                            FechaIngresoTexto = a.FechaIngreso == null ? "" : a.FechaIngreso.Value.ToShortDateString(),
+                            FechaSalidaTexto = a.FechaSalida == null ? "" : a.FechaSalida.Value.ToShortDateString(),
                             FormaIngreso = a.FormaIngreso,
                             CargoTexto = mi.MultitablaDescripcion
                         };
@@ -152,18 +158,20 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
         {
             var objDesdeDb = _db.Asignacion.FirstOrDefault(s => s.IdAsignacion == id);
             objDesdeDb.Estado = false;
+            objDesdeDb.FechaSalida = DateTime.Now;
         }
 
-        public AsignacionDto GetAsignacionPersonaGrupo(int? id)
+        public AsignacionDto GetAsignacionPersonaGrupo(int idAsignacion)
         {
-            var asigancion = _db.Asignacion;
+            var asignacion = _db.Asignacion;
             var persona = _db.Persona;
 
-            var query = from a in asigancion.Where(x => x.IdAsignacion==id.GetValueOrDefault() && x.Estado == true)
-                        join p in persona on a.IdPersona equals p.IdPersona
+            var query = from a in asignacion.Where(x => x.IdAsignacion == idAsignacion  && x.Estado == true)
+                        join p in persona.Where(x => x.Estado == true) on a.IdPersona equals p.IdPersona
                         select new AsignacionDto
                         {
                             IdAsignacion = a.IdAsignacion,
+                            IdPersona = p.IdPersona,
                             NombresCompleto = p.Nombres + " " + p.Apellidos,
                             IdGrupo = a.IdGrupo,
                             FechaIngreso = a.FechaIngreso,
@@ -185,7 +193,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             objDesdeDb.FechaSalida = asignacion.FechaSalida;
             objDesdeDb.FormaIngreso = asignacion.FormaIngreso;
             objDesdeDb.Cargo = asignacion.Cargo;
-            objDesdeDb.UsuarioActualizacion = "kmvalver";
+            objDesdeDb.UsuarioActualizacion = asignacion.UsuarioActualizacion;
             objDesdeDb.FechaActualizacion = DateTime.Now;
         }
 

@@ -44,7 +44,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label asp-for="IdGrupo"></label>
-                       @Html.DropDownList("IdGrupo", ListaGrupos, new { @id = "ddlGrupo", @class = "form form-control" })
+                       @Html.DropDownList("IdGrupo", ListaGrupos, new { @id = "ddlGrupo", @class = "form form-control", @disabled = "disabled" })
 
                     </div>
                 </div>
@@ -55,13 +55,13 @@
                         <input type="hidden" id="hdnFechaIngreso" class="form form-control" asp-for="FechaIngreso" />
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label asp-for="FechaSalida"></label>
                         <input id="txtFechaSalida" asp-for="FechaSalida" class="form form-control" />
                         <input type="hidden" id="hdnFechaSalida" class="form form-control" asp-for="FechaSalida" />
                     </div>
-                </div>
+                </div>*@
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
@@ -73,7 +73,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label asp-for="Cargo"></label>
-                        @Html.DropDownList("Cargo", listaCargos, new { @id = "ddlCargo", @class = "form form-control" })
+                        @Html.DropDownList("Cargo", listaCargos, new { @id = "ddlCargo", @class = "form form-control"})
                         <span asp-validation-for="Cargo" class="text-danger"></span>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
             var idAsignacion = $('#hdnIdAsignacion').val();
             var idGrupo = $('#ddlGrupo option:selected').val();
             var fechaIngreso = $('#txtFechaIngreso').val();
-            var fechaSalida = $('#txtFechaSalida').val();
+            //var fechaSalida = $('#txtFechaSalida').val();
             var formaIngreso = $('#txtFormaIngreso').val();
             var idcargo = $('#ddlCargo option:selected').val();
 
@@ -118,7 +118,7 @@
             frm.append("idAsignacion", idAsignacion)
             frm.append("IdGrupo", idGrupo)
             frm.append("fechaIngreso", fechaIngreso);
-            frm.append("fechaSalida", fechaSalida);
+            //frm.append("fechaSalida", fechaSalida);
             frm.append("formaIngreso", formaIngreso);
             frm.append("cargo", idcargo);
 

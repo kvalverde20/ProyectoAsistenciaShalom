@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Sistema de Asistencia";
+    ViewData["Title"] = "Sistema de Asistencias";   
     Layout = null;
 }
 
@@ -8,92 +8,108 @@
 <html lang="en">
 <head>
     <title>@ViewData["Title"]</title>
-    <link rel="icon" href="~/assets/img/icon.ico" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <!-- <link rel="icon" type="image/png" href="images/icons/favicon.ico"/> -->
+    <link rel="icon" href="~/assets/img/icon.ico" type="image/x-icon" />
     <link href="~/assets/css/toastr.min.css" rel="stylesheet" />
     <!--===============================================================================================-->
-    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/login_v11/vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
-    <link href="~/assets/css/main.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/login_v11/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
     <!--===============================================================================================-->
-    <link href="~/assets/css/util.css" rel="stylesheet" />
-
+    <link rel="stylesheet" type="text/css" href="~/assets/login_v11/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/assets/login_v11/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/login_v11/css/main.css">
+    <!--===============================================================================================-->
 </head>
 <body>
 
-    
-        <div class="limiter">
-            <div class="container-login100">
-                <div class="wrap-login100">
-                    
-                        <div class="login100-form-title" style="background-image: url('../assets/img/BannerShalom.jpg');">
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
+                <form class="login100-form validate-form">
+                    <span class="login100-form-title p-b-55">
+                        Sistema de control de Asistencias
+                    </span>
 
-                            <span class="login100-form-title-1">
-                                @*Sistema de Asistencia*@
-                            </span>
-                        </div>
-                    
-                        <form class="login100-form validate-form">
-                            <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
-                                <span class="label-input100">Usuario</span>
-                                <input id="txtUsuario" class="input100" type="text" placeholder="Ingrese su usuario">
-                                <span class="focus-input100"></span>
-                            </div>
-
-                            <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
-                                <span class="label-input100">Contraseña</span>
-                                <input id="txtpassword" class="input100" type="password" placeholder="Ingrese su contraseña">
-                                <span class="focus-input100"></span>
-                            </div>
-
-                            <div class="container-login100-form-btn">
-                                @*<button class="login100-form-btn">
-                        Login
-                    </button>*@
-
-                                <input type="button" class="login100-form-btn" onclick="Enviar()" value="Ingresar" />
-
-
-                            </div>
-                        </form>
+                    <div class="wrap-input100 validate-input m-b-16" data-validate="El Username es requerido">
+                        <input class="input100" id="txtUsuario" type="text" name="username" placeholder="Username" maxlength="20">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <span class="lnr lnr-user"></span>
+                        </span>
                     </div>
-                </div>
+
+                    <div class="wrap-input100 validate-input m-b-16" data-validate="La Contraseña es requerido">
+                        <input class="input100" id="txtpassword" type="password" name="pass" placeholder="Contraseña" maxlength="20">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <span class="lnr lnr-lock"></span>
+                        </span>
+                    </div>
+
+                    <div class="container-login100-form-btn p-t-25">
+                        @*<button class="login100-form-btn">
+                                Ingresar
+                            </button>*@
+                        <input type="button" class="login100-form-btn" onclick="Enviar()" value="Ingresar" />
+                    </div>
+
+                </form>
+            </div>
         </div>
-    
+    </div>
 
 
     <!--===============================================================================================-->
-    <script src="~/assets/js/core/jquery.3.2.1.min.js"></script>
+    <script src="~/assets/login_v11/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
-    <script src="~/assets/js/core/bootstrap.min.js"></script>
+    <script src="~/assets/login_v11/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/assets/login_v11/vendor/bootstrap/js/bootstrap.min.js"></script>
     <!--===============================================================================================-->
     <script src="~/assets/js/toastr.min.js"></script>
+    <script src="~/assets/login_v11/js/main.js"></script>
+
 
 </body>
 </html>
+
+
+
 
 
 <script>
     function Enviar() {
         var user = $('#txtUsuario').val();
         var pass = $('#txtpassword').val();
-
         var url = "Login/ValidarUsuario";
 
-        $.get(url, { username: user, password: pass}, function (data) {
-            if (data) {
-                toastr.success("Válido","", {
-                            "progressBar": true});
-                document.location.href = "/Home";
-                
-            } else {
-                toastr.error("Contraseña o usuario incorrecto", "ERROR", {
-                    "progressBar": true,
-                    "showDuration": "200"
-                });
+        if (user != "" && pass != "") {
 
-            }
-        })
+            $.get(url, { username: user, password: pass }, function (data) {
+                if (data) {
+                    toastr.success("Válido", "", {
+                        "progressBar": true
+                    });
+                    document.location.href = "/Home";
+
+                } else {
+                    toastr.error("Contraseña o usuario incorrecto", "ERROR", {
+                        "progressBar": true
+                    });
+
+                }
+            })
+        } else {
+            toastr.warning("Debe de completar todos los campos!", "ADVERTENCIA", {
+                "progressBar": true
+            });
+        }
+
+        
+        
     }
 </script>

@@ -201,10 +201,17 @@
             frm.append("ContrasenaRepetida", contrasenarepetida);
             frm.append("IdRol", idrol);
 
-            if (contrasena != contrasenarepetida) {
-                error("Las contraseñas no coinciden!");
+            if (contrasena.length > 6) {
+
+                if (contrasena != contrasenarepetida) {
+                    error("Las contraseñas no coinciden!");
+                    return;
+                }
+            } else {
+                advertencia("La contraseña debe de tener más de 6 dígitos");
                 return;
             }
+            
 
             $.ajax({
                 type: 'POST',

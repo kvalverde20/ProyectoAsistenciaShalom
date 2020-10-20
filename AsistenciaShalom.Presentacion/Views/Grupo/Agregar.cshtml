@@ -57,13 +57,13 @@
                         <span asp-validation-for="FechaInicio" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                @*<div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label asp-for="FechaFin"></label>
                         <input id="txtFechaFin" asp-for="FechaFin" class="form form-control" />
                         <span asp-validation-for="FechaFin" class="text-danger"></span>
                     </div>
-                </div>
+                </div>*@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-group">
                         <label asp-for="DiaReunion"></label>
@@ -116,7 +116,7 @@
             var nombre = $('#txtNombre').val();
             var descripcion = $('#txtDescripcion').val();
             var fechaInicio = $('#txtFechaInicio').val();
-            var fechaFin = $('#txtFechaFin').val();
+            //var fechaFin = $('#txtFechaFin').val();
             var diaReunion = $('#txtDiaReunion').val();
             var horario = $('#txtHorario').val();
             var tipoGrupo = $('#ddlTipoGrupo option:selected').val();
@@ -127,7 +127,7 @@
             frm.append("nombre", nombre);
             frm.append("descripcion", descripcion);
             frm.append("fechaInicio", fechaInicio);
-            frm.append("fechaFin", fechaFin);
+            //frm.append("fechaFin", fechaFin);
             frm.append("diaReunion", diaReunion);
             frm.append("horario", horario);
             frm.append("tipoGrupo", tipoGrupo);

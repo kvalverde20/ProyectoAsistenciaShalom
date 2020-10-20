@@ -24,4 +24,6 @@
     <ProjectReference Include="..\AsistenciaShalom.Utilitarios\AsistenciaShalom.Utilitarios.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
