@@ -64,6 +64,7 @@
 
         window.onload = function () {
 
+            Preloader();
             var url = "AsignacionGrupoFase/ListarGruposActivos";  //  controller/Metodo
             pintarTableAsigGrupoFase(url, ["idGrupo", "nombre", "fechaInicioTexto", "diaReunion", "horario", "tipoGrupoTexto"],
                 "idGrupo", "AsignacionGrupoFase");

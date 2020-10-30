@@ -65,14 +65,16 @@
 
 
     <!--===============================================================================================-->
-    <script src="~/assets/login_v11/vendor/jquery/jquery-3.2.1.min.js"></script>
+    @*<script src="~/assets/login_v11/vendor/jquery/jquery-3.2.1.min.js"></script>*@
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     <!--===============================================================================================-->
     <script src="~/assets/login_v11/vendor/bootstrap/js/popper.js"></script>
     <script src="~/assets/login_v11/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/jquery.preloaders.js"></script>
     <!--===============================================================================================-->
     <script src="~/assets/js/toastr.min.js"></script>
     <script src="~/assets/login_v11/js/main.js"></script>
-
 
 </body>
 </html>
@@ -87,8 +89,21 @@
         var pass = $('#txtpassword').val();
         var url = "Login/ValidarUsuario";
 
+        function PreloaderLogin() {
+
+            $.preloader.start({
+                modal: true,
+                src: 'sprites1.png'
+            });
+
+            setTimeout(function () {
+                $.preloader.stop();
+            }, 7000);
+        }
+
         if (user != "" && pass != "") {
 
+            PreloaderLogin();
             $.get(url, { username: user, password: pass }, function (data) {
                 if (data) {
                     toastr.success("Válido", "", {
@@ -102,7 +117,8 @@
                     });
 
                 }
-            })
+            });
+            
         } else {
             toastr.warning("Debe de completar todos los campos!", "ADVERTENCIA", {
                 "progressBar": true

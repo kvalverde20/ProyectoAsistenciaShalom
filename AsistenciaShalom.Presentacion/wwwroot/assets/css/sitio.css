@@ -68,8 +68,8 @@ table.blueTable {
 
 /*Checkboxes*/
 .checkAsistencia {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
 }
 
 .check {
@@ -124,3 +124,23 @@ table.blueTable {
             bottom: 5%;
             margin: auto;
         }
+
+
+@media(min-width:360px) {
+    .modal-personas {
+        position: relative;
+        width: 100%;
+        margin: .5rem;
+        pointer-events: none;
+    }
+}
+
+.sweetalert-p {
+    font-size: 1.125em;
+    text-align: left;
+    margin-left: 68px;
+    margin-bottom: 3px;
+}
+
+
+

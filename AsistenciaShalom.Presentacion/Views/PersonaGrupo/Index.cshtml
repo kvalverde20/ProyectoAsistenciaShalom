@@ -75,11 +75,10 @@
 
         window.onload = function () {
 
+            Preloader();
             var url = "PersonaGrupo/ListarPersonaGrupoTotal";
             pintar(url, ["idAsignacion", "nombresCompleto", "nombreGrupo", "fechaIngresoTexto", "formaIngreso","cargoTexto"],
                 "idAsignacion", "PersonaGrupo");
-            //pintarTableAsignaciones(url, ["idPersona", "nombres", "apellidos", "paisOrigen", "fechaNacimientoTexto", "ministerioTexto","comunidadTexto"],
-            //    "idPersona", "Asignacion");
 
         }
 

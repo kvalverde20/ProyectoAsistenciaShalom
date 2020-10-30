@@ -11,6 +11,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
         void Update(Persona persona);
         void LogicalDelete(int id);
         IEnumerable<PersonaDto> GetPersonasActivas();
+        IEnumerable<PersonaDto> GetPersonasNoAsignadas();
         PersonaDto GetPersonaPorId(int? id);
         IEnumerable<PersonaDto> GetListaPersonasUsuario(string nombrecompleto);
 

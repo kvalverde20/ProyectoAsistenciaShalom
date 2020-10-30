@@ -44,20 +44,20 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 							<td  style="justify-content: center; display: table-cell; text-align: center;">
 								<div class="form-button-action">`
 				contenido += `<a  
-								href="${nombreController}/Ver/${objetoActual[propiedadId]}" data-toggle="tooltip" data-placement="top" data-original-title="Asignado"
-								class="btn btn-link btn-default btn-lg">
+								href="${nombreController}/Ver/${objetoActual[propiedadId]}" data-toggle="tooltip"  
+								class="btn btn-link btn-default btn-lg" data-original-title="Ver"> 
 								<i class="fas fa-eye"></i>	
 								</a>`
 				contenido += `<a  
-								href="${nombreController}/EditarReunionAsistencia/${objetoActual[propiedadId]}" data-toggle="tooltip" data-placement="top" data-original-title="Asignado"
-								class="btn btn-link btn-secondary btn-lg">
+								href="${nombreController}/EditarReunionAsistencia/${objetoActual[propiedadId]}" data-toggle="tooltip"  
+								class="btn btn-link btn-secondary btn-lg"  data-original-title="Editar">
 								<i class="fas fa-edit"></i>	
 								</a>`
 			} else {
 				contenido += `
 							<td  style="justify-content: center; display: table-cell; text-align: center;">
 								<div class="form-button-action">`
-				contenido += `<a type="button" 
+				contenido += `<a 
 								href="${nombreController}/Asistencia/${objetoActual[propiedadId]}" data-toggle="tooltip"
 								class="btn btn-link btn-success btn-lg" data-original-title="Registrar Asistencia" >
 								<i class="fas fa-calendar-plus"></i>	
@@ -83,7 +83,7 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 			tbody.innerHTML = contenido;
 			$('#table').DataTable(
 				{
-					"order": [[0, "desc"]],
+					"order": [[3, "desc"]],
 					"language": {
 						"emptyTable": "No hay registros",
 						"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
@@ -102,10 +102,16 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
+					},
+					drawCallback: function (settings) {
+						$('[data-toggle="tooltip"]').tooltip();
 					}
-
 				}
 			);
+			$('#table').on('draw', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
 		} else {
 
 			$('#' + idTabla).DataTable().clear();
@@ -113,7 +119,7 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 			tbody.innerHTML = contenido;
 			$('#' + idTabla).DataTable(
 				{
-					"order": [[0, "desc"]],
+					"order": [[3, "desc"]],
 					"language": {
 						"emptyTable": "No hay registros",
 						"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
@@ -132,9 +138,16 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
+					},
+					drawCallback: function (settings) {
+						$('[data-toggle="tooltip"]').tooltip();
 					}
 				}
 			);
+
+			$('#' + idTabla).on('draw', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
 		}
 	})
 

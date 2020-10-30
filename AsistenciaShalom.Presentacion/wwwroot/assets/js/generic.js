@@ -28,6 +28,9 @@ function Imprimir() {
 
 window.onload = function () {
 	$(document).ready(function () {
+		
+		$('[data-toggle="tooltip"]').tooltip();
+				
 		$('#table').DataTable(
 				{
 					//"order": [[0, "desc"]],
@@ -71,6 +74,19 @@ window.onload = function () {
 
 
 	});
+}
+
+function Preloader() {
+
+	$.preloader.start({
+		modal: true,
+		//src: 'sprites2.png'
+		src: 'sprites1.png'
+	});
+
+	setTimeout(function () {
+		$.preloader.stop();
+	}, 2200);
 }
 
 
@@ -157,7 +173,7 @@ function pintar(url, campos, propiedadId, nombreController,
 					<td>
 						<div class="form-button-action"> `  
 							
-							contenido += `  <a  data-toggle="tooltip" class="btn btn-link btn-lg btn-danger" data-original-title="Eliminar"
+							contenido += ` <a data-toggle="tooltip" class="btn btn-link btn-lg btn-danger" data-original-title="Eliminar"
 												onclick="Eliminar(${objetoActual[propiedadId]})">
 												<i class="fa fa-times"></i>
 												</a>`															
@@ -228,9 +244,19 @@ function pintar(url, campos, propiedadId, nombreController,
 							"previous": "Anterior"
 						}
 					}
-					
+					,
+					drawCallback: function (settings) {
+						//console.log('drawCallback');
+						$('[data-toggle="tooltip"]').tooltip();
+					}
 				}
 			);
+
+			$('#table').on('draw', function () {
+				//console.log('draw event');
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
 		} else {
 
 			$('#' + idTabla).DataTable().clear();
@@ -258,14 +284,24 @@ function pintar(url, campos, propiedadId, nombreController,
 							"previous": "Anterior"
 						}
 					}
+					,					
+					drawCallback: function (settings) {
+						//console.log('drawCallback');
+						$('[data-toggle="tooltip"]').tooltip();
+					}
 				}
 			);
+
+			$('#' + idTabla).on('draw', function () {
+				//console.log('draw event');
+				$('[data-toggle="tooltip"]').tooltip();
+			});
 		}
 		
 	})
 }
 
-
+var dataTable;
 function pintarTableAsignaciones(url, campos, propiedadId, nombreController, id = "tbDatos", idTabla = "table", propiedadMostrar = "") {
 	var contenido = "";
 
@@ -282,59 +318,66 @@ function pintarTableAsignaciones(url, campos, propiedadId, nombreController, id 
 		for (var i = 0; i < data.length; i++) {
 			if (data[i].estadoAsignacionGrupo == 'A') {
 				contenido += "<tr>";
+				contenido += "<td>" + "<input type='checkbox' class='checkAsistencia' disabled  value='1'/>" + "</td>"
 			}
 			else {
 				contenido += "<tr class='text-danger'>";
+				contenido += "<td>" + "<input type='checkbox' style='margin: 14px;' class='checkAsistencia' id='chk" + data[i][propiedadId] +"'  value='"+ data[i][propiedadId]+"'/>" + "</td>"
 			}
 
-			// contenido += "<tr class='table-warning'>";
+			//contenido += "<td>" + "<input type='checkbox' class='checkAsistencia'  value='1'/>" + "</td>"
+			
 			for (var j = 0; j < campos.length; j++) {
 				nombreCampo = campos[j];
 				objetoActual = data[i];
 				//contenido += "<td>" + objetoActual[nombreCampo] + "</td>"
+				 
+				//contenido += "<td>" + "<input type='checkbox'  value='1'/>" + "</td>"
+
 				if (j == 0) {
+					
 					contenido += "<td style='display: none'>" + objetoActual[nombreCampo] + "</td>"
 				} else {
+					
 					contenido += "<td>" + objetoActual[nombreCampo] + "</td>"
 				}
 
 			}
 
-			contenido += `
-							<td>
-								<div class="form-button-action"> `
+			//contenido += `
+			//				<td>
+			//					<div class="form-button-action"> `
 
-			if (data[i].estadoAsignacionGrupo == 'A') {
+			//if (data[i].estadoAsignacionGrupo == 'A') {
 
-				contenido += `<a  
-								href="${nombreController}/Asignar/${objetoActual[propiedadId]}" data-toggle="tooltip" data-placement="top" data-original-title="Asignado"
-								class="btn btn-link btn-success disabled">
-								<i class="fas fa-user-check"></i>	
-								</a>`
-			} else {
-				contenido += `<a type="button" 
-								href="${nombreController}/Asignar/${objetoActual[propiedadId]}" data-toggle="tooltip"
-								class="btn btn-link btn-danger" data-original-title="Editar" >
-								<i class="fas fa-user-edit"></i>	
-								</a>`
-			}
-			//contenido += `<a  
-			//							   href="${nombreController}/Editar/${objetoActual[propiedadId]}" data-toggle="tooltip"
-			//								class="btn btn-link btn-primary" data-original-title="Editar" >
-			//								<i class="fa fa-edit aria-hidden="true"></i>	
-			//								</a>`
-			contenido += ` </div> 
-							</td>`;
+			//	contenido += `<a  
+			//					href="${nombreController}/Asignar/${objetoActual[propiedadId]}" data-toggle="tooltip" data-placement="top" data-original-title="Asignado"
+			//					class="btn btn-link btn-lg btn-success disabled">
+			//					<i class="fas fa-user-check"></i>	
+			//					</a>`
+			//} else {
+			//	contenido += `<a type="button" 
+			//					href="${nombreController}/Asignar/${objetoActual[propiedadId]}" data-toggle="tooltip"
+			//					class="btn btn-link btn-lg btn-danger" data-original-title="Editar" >
+			//					<i class="fas fa-user-edit"></i>	
+			//					</a>`
+			//}
+
+			//contenido += ` </div> 
+			//				</td>`;
 
 
 			contenido += "</tr>";
 		}
-
-		tbody.innerHTML = contenido;
+		
+		//tbody.innerHTML = contenido;
 		if (idTabla == null || idTabla == undefined || idTabla == "") {
-			$('#table').DataTable(
+			$('#table').DataTable().clear();
+			$('#table').DataTable().destroy();
+			tbody.innerHTML = contenido;
+			dataTable =	$('#table').DataTable(				
 				{
-					"order": [[0, "desc"]],
+					"order": [[1, "desc"]],
 					"language": {
 						"emptyTable": "No hay registros",
 						"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
@@ -352,14 +395,20 @@ function pintarTableAsignaciones(url, campos, propiedadId, nombreController, id 
 							"last": "Ultimo",
 							"next": "Siguiente",
 							"previous": "Anterior"
-						}
+						}						
 					}
+					,
+					"select": 'multi'
 				}
+				
 			);
 		} else {
-			$('#' + idTabla).DataTable(
+			$('#' + idTabla).DataTable().clear();
+			$('#' + idTabla).DataTable().destroy();
+			tbody.innerHTML = contenido;
+			dataTable = $('#' + idTabla).DataTable(
 				{
-					"order": [[0, "desc"]],
+					"order": [[1, "desc"]],
 					"language": {
 						"emptyTable": "No hay registros",
 						"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
@@ -378,13 +427,35 @@ function pintarTableAsignaciones(url, campos, propiedadId, nombreController, id 
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
-					}
+					},
+					"select": 'multi'
 				}
 			);
 		}
 	})
 
 }
+
+// Handle click on "Select all" control
+$('#example-select-all').on('click', function () {
+	// Check/uncheck all checkboxes in the table
+	var rows = dataTable.rows({ 'search': 'applied' }).nodes();
+	$('input[type="checkbox"]', rows).prop('checked', this.checked);
+});
+
+// Handle click on checkbox to set state of "Select all" control
+$('#table tbody').on('change', 'input[type="checkbox"]', function () {
+	// If checkbox is not checked
+	if (!this.checked) {
+		var el = $('#example-select-all').get(0);
+		// If "Select all" control is checked and has 'indeterminate' property
+		if (el && el.checked && ('indeterminate' in el)) {
+			// Set visual state of "Select all" control 
+			// as 'indeterminate'
+			el.indeterminate = true;
+		}
+	}
+});
 
 
 
@@ -442,6 +513,16 @@ function pintarMultiplePopup(divTabla,url, cabeceras = ["Id","Nombre Completo"],
 	
 }
 
+function errorHtml(msje) {
+
+	Swal.fire({
+		icon: 'error',
+		title: 'ERROR',
+		html: msje
+	});
+}
+
+
 function correcto(title) {
 	
 	Swal.fire({
@@ -449,7 +530,7 @@ function correcto(title) {
 		icon: 'success',
 		title: title,
 		showConfirmButton: false,
-		timer: 2500
+		timer: 3500
 	})
 }
 

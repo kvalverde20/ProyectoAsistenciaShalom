@@ -7,8 +7,18 @@
 
     ViewData["Menu"] = "Administracion";
     ViewData["Controlador"] = "Asignacion";
-}
 
+    //int nFilas = ViewBag.Filas == null ? 0 : ViewBag.Filas;
+    //List<PersonaDto> ListaSeleccionados = new List<PersonaDto>();
+    //if (nFilas > 0)
+    //{
+    //    ListaSeleccionados = ViewBag.ListaSeleccionados;
+    //}
+
+    List<SelectListItem> ListaGrupos = ViewBag.ListaGrupos;
+    List<SelectListItem> listaCargos = ViewBag.listaCargos;
+}
+ 
 
 <div class="card">
     <div class="card-header">
@@ -18,12 +28,26 @@
         </div>
         <div class="card-tools pull-right">
             <div class="input-group">
-                @*<a class="btn btn-primary" asp-action="Agregar" asp-controller="Asignacion">
-                        <span class="btn-label">
-                            <i class="fa fa-plus-circle"></i>
-                        </span>
-                        Nuevo
-                    </a>*@
+
+                @*<a class="btn btn-primary" asp-action="AbrirFormularioAsignacion" asp-controller="Asignacion">
+            <span class="btn-label">
+                <i class="fa fa-plus-circle"></i>
+            </span>
+            Asignar
+        </a>*@
+                <button id="btnAbrir" class="btn btn-primary">
+                    <span class="btn-label">
+                        <i class="fas fa-user-edit"></i>
+                    </span>
+                    Asignar
+                </button>
+                <button style="display:none;" id="btnAbrirModal" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+                    <span class="btn-label">
+                        <i class="fas fa-user-edit"></i>
+                    </span>
+                    Asignar
+                </button>
+
             </div>
         </div>
     </div>
@@ -36,14 +60,15 @@
                 <table id="table" width="100%" class="display table table-bordered table-striped table-hover blueTable">
                     <thead>
                         <tr>
-                            <th style="display:none">@Html.DisplayNameFor(model => model.IdPersona)</th>                          
+                            <th style="width: 45px;"><input style="margin:14px;" name="select_all" class="checkAsistencia" value="false" id="example-select-all" type="checkbox" /></th>
+                            <th style="display:none">@Html.DisplayNameFor(model => model.IdPersona)</th>
                             <th>@Html.DisplayNameFor(model => model.Nombres)</th>
                             <th>@Html.DisplayNameFor(model => model.Apellidos)</th>
                             <th>@Html.DisplayNameFor(model => model.PaisOrigen)</th>
                             <th>@Html.DisplayNameFor(model => model.FechaNacimientoTexto)</th>
                             <th>@Html.DisplayNameFor(model => model.MinisterioTexto)</th>
                             <th>@Html.DisplayNameFor(model => model.ComunidadTexto)</th>
-                            <th>Acciones</th>
+                            @*<th>Acciones</th>*@
                         </tr>
                     </thead>
 
@@ -59,20 +84,287 @@
 </div>
 
 
+<!-- Modal -->
+<div>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="card-title modal-title"> Personas a asignar</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body" id="divModal">
+                    @*<label>Ingrese nombre completo</label>
+                        <input type="text" id="txtnc" class="form-control" onkeyup="filtrarNom()" />*@
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Grupo de Oración</label>
+                                @Html.DropDownList("IdGrupo", ListaGrupos, new { @id = "ddlGrupo", @class = "form form-control" })
+                                @*<span class="text-danger"></span>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Fecha de Ingreso</label>
+                                <input type="date" id="txtFecIngreso" class="form form-control" />
+                                @*<span  class="text-danger"></span>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Forma de Ingreso</label>
+                                <input id="txtFormaIngreso" class="form form-control" />
+                                @*<span  class="text-danger"></span>*@
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Cargo</label>
+                                @Html.DropDownList("Cargo", listaCargos, new { @id = "ddlCargo", @class = "form form-control" })
+                                @*<span class="text-danger"></span>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="divTabla">
+                       
+                    </div>
+
+                  
+                </div>
+
+
+                <div class="modal-footer">
+                    <button id="btnGuardar" class="btn btn-primary">
+                        <span class="btn-label"><i class="fas fa-save"></i> </span>Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnCerrar">
+                        <span class="btn-label"><i class="fas fa-times-circle"></i> </span>Cancelar
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
+    <script src="~/assets/js/controladores/asignacionpersonagrupo.js"></script>
 
     <script>
 
         window.onload = function () {
 
+            Preloader();
             var url = "Asignacion/ListarPersonasTotales";
             //pintar(url, ["idAsignacion", "nombresPersona", "apellidosPersona", "nombreGrupo", "fechaIngreso"],
             //    "idAsignacion", "Asignacion");
-            pintarTableAsignaciones(url, ["idPersona", "nombres", "apellidos", "paisOrigen", "fechaNacimientoTexto", "ministerioTexto","comunidadTexto"],
+            pintarTableAsignaciones(url, ["idPersona", "nombres", "apellidos", "paisOrigen", "fechaNacimientoTexto", "ministerioTexto", "comunidadTexto"],
                 "idPersona", "Asignacion");
+        }
 
+        function LimpiarCamposModal() {
+            $("#txtFecIngreso").val("");
+            $("#txtFormaIngreso").val("");
+            $('#ddlGrupo').val("");
+            $('#ddlCargo').val("");
         }
 
 
+        var ids = [];
+        $('#table').on('change', "input[type='checkbox']", function () {
+          
+            var valor = $(this).val();
+            //$(this).val(this.checked ? valor : "");
+
+            function removeItemFromArr(arr, item) {
+                var itemNum = parseInt(item);
+                var i = arr.indexOf(itemNum);
+
+                if (i !== -1) {
+                    arr.splice(i, 1);
+                }
+            }
+
+            function checkAll() {
+                var frm = new FormData();
+
+                frm.append("valor", valor);
+
+                $.ajax({
+                    type: "POST",
+                    url: "Asignacion/SeleccionarTodo",
+                    data: frm,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        if (data.length > 0) {                            
+                            ids = data;
+                            //console.log(ids);
+                        } 
+                    }
+                })
+            }
+
+            if (valor != "true" && valor != "false") {  
+
+                if (this.checked) {
+                    var valEnt = parseInt(valor);
+                    ids.push(valEnt);
+                } else {
+                    removeItemFromArr(ids, valor);
+                }
+            } else { //Check-all - Check de la cabecera
+
+                if (this.checked) {
+                    //$(this).val(this.checked ? "true" : "false");
+                    valor = "true";
+                    checkAll();
+                    // para cada checkbox "chequeado"
+                    //$("input[type=checkbox]:checked").each(function () {
+
+                    //    var id = $(this).val();
+                    //    ids.push(id);
+                    //});
+
+
+
+                } else {
+                    valor = "false";
+                    ids = [];
+                }
+                
+                
+            }            
+            //console.log(ids);
+            
+        });
+        
+
+        $('#btnAbrir').click(function (event) {
+            event.preventDefault();
+
+            if (ids.length > 0) {
+
+                if (ids.length <= 100) {
+                    var frm = new FormData();
+
+                    for (var i = 0; i < ids.length; i++) {
+                        frm.append("idPersonas[]", ids[i]);
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "Asignacion/AbrirFormularioAsignacion",
+                        data: frm,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+
+                            if (data) {
+                                $("#btnAbrirModal").click();
+                                pintarPopupAsignaciones("divTabla", "Asignacion/Asignacion/ListarPersonasToAsignar",
+                                    ["Id", "Nombres", "Apellidos", "Ministerio", "Comunidad"],
+                                    ["idPersona", "nombres", "apellidos", "ministerioTexto", "comunidadTexto"],
+                                    "idPersona");
+                                //correcto("Se edito el tipo usuario  correctamente");
+                                //document.getElementById("btnCerrar").click();
+                                //document.getElementById("frmEnviar").submit();
+                            } else {
+                                advertencia("No hay registros");
+                                //document.getElementById("divError").innerHTML = data;
+                            }
+                        }
+                    })
+
+                }
+                else {
+                    advertencia("Solo se puede seleccionar un máximo de 100 personas para asignar a un grupo");
+                }
+                
+            } else {
+                advertencia("Debe seleccionar al menos un registro para asignar!");
+            }
+            
+        });
+
+
+        $('#btnGuardar').click(function (event) {
+            event.preventDefault();
+            var msjError = "";
+
+            if (ids.length > 0) {
+                //if (ids.length <= 100) {
+                    var fechaingreso = $("#txtFecIngreso").val();
+                    var formaingreso = $("#txtFormaIngreso").val();
+                    var idGrupo = $('#ddlGrupo option:selected').val();
+                    var idCargo = $('#ddlCargo option:selected').val();
+                    var frm = new FormData();
+                    frm.append("IdGrupo", idGrupo)
+                    frm.append("FechaIngreso", fechaingreso);
+                    frm.append("FormaIngreso", formaingreso)
+                    frm.append("Cargo", idCargo);
+
+                    if (idGrupo == "") {
+                        msjError += "<p class='sweetalert-p'>* El Grupo de Oración es obligatorio</p>";
+                        msjError += "<br>";
+                    }
+                    if (idCargo == "") {
+                        msjError += "<p class='sweetalert-p'>* El Cargo es obligatorio</p>";
+                    }
+
+                    for (var i = 0; i < ids.length; i++) {
+                        frm.append("idPersonas[]", ids[i]);
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "Asignacion/GuardarAsignacionMasiva",
+                        data: frm,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+
+                            if (data) {
+
+                                pintarTableAsignaciones("Asignacion/ListarPersonasTotales", ["idPersona", "nombres", "apellidos", "paisOrigen", "fechaNacimientoTexto", "ministerioTexto", "comunidadTexto"],
+                                    "idPersona", "Asignacion");
+                                document.getElementById("btnCerrar").click();
+
+                                if (ids.length == 1) {
+
+                                    correcto("Se ha registrado " + ids.length + " asignación correctamente!");
+                                } else {
+                                    correcto("Se han registrado " + ids.length + " asignaciones correctamente!");
+                                }
+                                
+                                ids = [];
+                                LimpiarCamposModal();
+                            } else {
+                                errorHtml(msjError);
+                                //ids = [];
+
+                            }
+                        }
+                    })
+                //}
+                //else {
+                //    advertencia("Solo se puede seleccionar un máximo de 100 personas para asignar a un grupo");
+                //}
+                
+            }
+
+        });
+
+
     </script>
-    }
+}

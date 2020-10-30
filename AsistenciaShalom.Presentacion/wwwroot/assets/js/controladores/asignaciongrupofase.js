@@ -48,7 +48,7 @@ function pintarTableAsigGrupoFase(url, campos, propiedadId, nombreController, id
 			} else {
 				contenido += `<a type="button" 
 								href="${nombreController}/Asignar/${objetoActual[propiedadId]}" data-toggle="tooltip"
-								class="btn btn-lg btn-link btn-danger" data-original-title="Asignar" >
+								class="btn btn-link btn-danger" data-original-title="Asignar" >
 								<i class="fas fa-tasks"></i>	
 								</a>`
 			}
@@ -83,9 +83,16 @@ function pintarTableAsigGrupoFase(url, campos, propiedadId, nombreController, id
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
+					},
+					drawCallback: function (settings) {
+						$('[data-toggle="tooltip"]').tooltip();
 					}
 				}
 			);
+			$('#table').on('draw', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
 		} else {
 			$('#' + idTabla).DataTable(
 				{
@@ -108,9 +115,15 @@ function pintarTableAsigGrupoFase(url, campos, propiedadId, nombreController, id
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
+					},
+					drawCallback: function (settings) {
+						$('[data-toggle="tooltip"]').tooltip();
 					}
 				}
 			);
+			$('#' + idTabla).on('draw', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
 		}
 	})
 

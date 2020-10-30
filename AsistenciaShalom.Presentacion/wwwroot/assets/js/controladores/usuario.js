@@ -94,10 +94,19 @@ function pintarTablaUsuarios(url, campos, propiedadId, nombreController, id = "t
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
+					},
+					drawCallback: function (settings) {
+						$('[data-toggle="tooltip"]').tooltip();
 					}
 
 				}
 			);
+
+			$('#table').on('draw', function () {
+				//console.log('draw event');
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
 		} else {
 
 			$('#' + idTabla).DataTable().clear();
@@ -125,8 +134,15 @@ function pintarTablaUsuarios(url, campos, propiedadId, nombreController, id = "t
 							"previous": "Anterior"
 						}
 					}
+					,
+					drawCallback: function (settings) {						
+						$('[data-toggle="tooltip"]').tooltip();
+					}
 				}
 			);
+			$('#' + idTabla).on('draw', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
 		}
 	})
 

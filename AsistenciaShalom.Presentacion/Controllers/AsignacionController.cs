@@ -31,6 +31,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
         public IActionResult Index()
         {
+            CargaCombo();
             return View();
         }
 
@@ -40,7 +41,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             List<PersonaDto> lista = new List<PersonaDto>();
             try
             {
-                 lista = _contenedorTrabajo.Persona.GetPersonasActivas().ToList();
+                 lista = _contenedorTrabajo.Persona.GetPersonasNoAsignadas().ToList();
             }
             catch (Exception ex)
             {
@@ -49,6 +50,124 @@ namespace AsistenciaShalom.Presentacion.Controllers
             }
             
             return lista;
+        }
+
+        [HttpGet(("Asignacion/Asignacion/ListarPersonasToAsignar"))]
+        public List<PersonaDto> ListarPersonasToAsignar()
+        {
+            List<PersonaDto> list = new List<PersonaDto>();
+            try
+            {
+                list = Generico.listaPersonasSeleccionadas;
+                
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return list;
+        }
+        
+
+
+        [HttpPost]
+        public bool AbrirFormularioAsignacion(int[] idPersonas)
+        {
+            bool rpta = false;
+            List<PersonaDto> lista = new List<PersonaDto>();
+            Generico.listaPersonasSeleccionadas = null;
+            try
+            {
+                CargaCombo();
+                foreach (var id in idPersonas)
+                {
+                    var p = _contenedorTrabajo.Persona.GetPersonaPorId(id);
+                    lista.Add(p);
+                }
+                Generico.listaPersonasSeleccionadas = lista;
+                rpta = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return rpta;
+        }
+
+
+
+        [HttpPost]
+        public bool GuardarAsignacionMasiva(int[] idPersonas, AsignacionDto asignacion)
+        {
+            bool rpta = false;
+            List<AsignacionDto> lista = new List<AsignacionDto>();
+            try
+            {
+                using (var transaccion = new TransactionScope())
+                {
+                    if (ModelState.IsValid)
+                    {
+                        foreach (var id in idPersonas)
+                        {
+                            asignacion.IdPersona = id;
+                            asignacion.Estado = true;
+                            asignacion.FechaIngreso = asignacion.FechaIngreso == null ? DateTime.Now : asignacion.FechaIngreso;
+                            asignacion.FormaIngreso = asignacion.FormaIngreso == null ? "" : asignacion.FormaIngreso;
+                            asignacion.UsuarioCreacion = HttpContext.Session.GetString("username");
+                            asignacion.FechaCreacion = DateTime.Now;
+                            
+                            var entidad = _mapper.Map<Asignacion>(asignacion);
+                            _contenedorTrabajo.Asignacion.Add(entidad);
+                            _contenedorTrabajo.Save();
+
+                            //***Actualizamos el estadoAsignacion a 'A' en la Tabla Persona
+                            _contenedorTrabajo.Asignacion.UpdateEstadoAsignacionGrupo(id);
+                            _contenedorTrabajo.Save();
+                            
+                        }
+                        transaccion.Complete();
+                        rpta = true;
+                    }
+                }
+                                                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return rpta;
+        }
+
+
+
+        [HttpPost]
+        public List<int> SeleccionarTodo(string valor)
+        {
+            List<int> rpta = new List<int>();
+            List<PersonaDto> listaPersonas = new List<PersonaDto>();
+
+            try
+            {
+                if (valor == "true")
+                {
+                    listaPersonas = _contenedorTrabajo.Persona.GetPersonasNoAsignadas().ToList();
+                    foreach (var p in listaPersonas)
+                    {
+                        var elem = p.IdPersona;
+                        rpta.Add(elem);
+                    }
+                }               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return rpta;
         }
 
         [HttpGet]

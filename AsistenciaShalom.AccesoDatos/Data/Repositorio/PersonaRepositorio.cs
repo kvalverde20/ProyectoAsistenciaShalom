@@ -49,6 +49,37 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             objDesdeDb.Estado = false;
         }
 
+
+        public IEnumerable<PersonaDto> GetPersonasNoAsignadas()
+        {
+            var persona = _db.Persona;
+            var comunidad = _db.Comunidad;
+            var ministerio = _db.Ministerio;
+            var multitabla = _db.Multitabla;
+
+            var lista = from p in persona.Where(x => x.Estado == true && x.EstadoAsignacionGrupo == "N")
+                        join c in comunidad on p.IdComunidad equals c.IdComunidad
+                        join mi in ministerio on p.IdMinisterio equals mi.IdMinisterio
+                        select new PersonaDto
+                        {
+                            IdPersona = p.IdPersona,
+                            Nombres = p.Nombres,
+                            Apellidos = p.Apellidos,
+                            PaisOrigen = p.PaisOrigen,
+                            FechaNacimientoTexto = p.FecNacimiento.Value.ToShortDateString(),
+                            NombreCompletoAcompanador = p.NombreCompletoAcompanador,
+                            Correo = p.Correo,
+                            Telefono = p.Telefono,
+                            MinisterioTexto = mi.Nombre,
+                            ComunidadTexto = c.Nombre,
+                            Estado = p.Estado.Value,
+                            EstadoAsignacionGrupo = p.EstadoAsignacionGrupo,
+                            NombresCompleto = p.Nombres + " " + p.Apellidos
+                        };
+
+            return lista.AsEnumerable();
+        }
+
         public IEnumerable<PersonaDto> GetPersonasActivas()
         {
             var persona     = _db.Persona;
