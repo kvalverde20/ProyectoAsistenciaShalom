@@ -38,9 +38,9 @@
                         <thead>
                             <tr>
                                 <th style="display:none">@Html.DisplayNameFor(model => model.IdReunion)</th>
-                                <th>@Html.DisplayNameFor(model => model.NombreGrupo)</th>
+                                <th style="width:12%">@Html.DisplayNameFor(model => model.NombreGrupo)</th>
                                 <th>@Html.DisplayNameFor(model => model.NombreFase)</th>
-                                <th>@Html.DisplayNameFor(model => model.FechaReunionTexto)</th>
+                                <th style="width:12%">@Html.DisplayNameFor(model => model.FechaReunionTexto)</th>
                                 <th>@Html.DisplayNameFor(model => model.TipoReunion)</th>
                                 <th>@Html.DisplayNameFor(model => model.TemaFormacion)</th>
                                 <th>@Html.DisplayNameFor(model => model.Predicador)</th>
@@ -70,7 +70,7 @@
 
             Preloader();
             var url = "Reunion/listarReuniones";
-            pintarTableReuniones(url, ["idReunion", "nombreGrupo", "nombreFase", "fechaReunionTexto", "tipoReunion",
+            pintarTableReuniones(url, ["idReunion", "nombreGrupo", "nombreFase", "fechaReunionTexto", "tipoReunionTexto",
                                     "temaFormacion","predicador"],
                                     "idReunion", "Reunion");
         }

@@ -24,11 +24,13 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             var grupo     = _db.Grupo;
             var grupoFase = _db.Grupofase;
             var fase      = _db.Fase;
+            var multitabla = _db.Multitabla;
 
             var lista = from r in reunion
                         join gf in grupoFase on r.IdGrupoFase equals gf.IdGrupoFase
                         join g  in grupo.Where(x => x.IdGrupo == idGrupo) on gf.IdGrupo equals g.IdGrupo
                         join f in fase on gf.IdFase equals f.IdFase
+                        join m in multitabla on r.TipoReunion equals m.IdMultitabla
 
                         select new ReunionDto
                         {
@@ -36,6 +38,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             IdGrupoFase = r.IdGrupoFase,
                             FechaReunion = r.FechaReunion,
                             TipoReunion = r.TipoReunion,
+                            TipoReunionTexto = m.MultitablaDescripcion,
                             FechaReunionTexto = r.FechaReunion.Value.ToShortDateString(),
                             TemaFormacion = r.TemaFormacion,
                             RhemaOracion = r.RhemaOracion,
@@ -45,9 +48,33 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             EstadoRegistroAsistencia = r.EstadoRegistroAsistencia
                         };
 
-            return lista.AsEnumerable();
+            return lista.AsEnumerable().OrderByDescending(x=> x.FechaReunion);
         }
 
+        public ReunionDto GetReunionPorId(int idReunion)
+        {
+            var reunion = _db.Reunion;
+            var multitabla = _db.Multitabla;
+
+            var consulta =  from r in reunion.Where(x => x.IdReunion == idReunion)
+                            join m in multitabla on r.TipoReunion equals m.IdMultitabla
+
+                            select new ReunionDto
+                            {
+                                IdReunion = r.IdReunion,
+                                IdGrupoFase = r.IdGrupoFase,
+                                FechaReunion = r.FechaReunion,
+                                TipoReunion = r.TipoReunion,
+                                TipoReunionTexto = m.MultitablaDescripcion,
+                                FechaReunionTexto = r.FechaReunion.Value.ToShortDateString(),
+                                TemaFormacion = r.TemaFormacion,
+                                RhemaOracion = r.RhemaOracion,
+                                Predicador = r.Predicador,
+                                EstadoRegistroAsistencia = r.EstadoRegistroAsistencia
+                            };
+
+            return consulta.FirstOrDefault();
+        }
 
         public IEnumerable<ReunionDto> GetReunionesTotales()
         {
@@ -55,18 +82,20 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             var grupo = _db.Grupo;
             var grupoFase = _db.Grupofase;
             var fase = _db.Fase;
+            var multitabla = _db.Multitabla;
 
             var lista = from r in reunion
                         join gf in grupoFase on r.IdGrupoFase equals gf.IdGrupoFase
                         join g in grupo on gf.IdGrupo equals g.IdGrupo
                         join f in fase on gf.IdFase equals f.IdFase
+                        join m in multitabla on r.TipoReunion equals m.IdMultitabla
 
                         select new ReunionDto
                         {
                             IdReunion = r.IdReunion,
                             IdGrupoFase = r.IdGrupoFase,
                             FechaReunion = r.FechaReunion,
-                            TipoReunion = r.TipoReunion,
+                            TipoReunionTexto = m.MultitablaDescripcion,
                             FechaReunionTexto = r.FechaReunion.Value.ToShortDateString(),
                             TemaFormacion = r.TemaFormacion,
                             RhemaOracion = r.RhemaOracion,
@@ -76,7 +105,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             EstadoRegistroAsistencia = r.EstadoRegistroAsistencia
                         };
 
-            return lista.AsEnumerable();
+            return lista.AsEnumerable().OrderByDescending(x => x.FechaReunion); 
         }
 
         public IEnumerable<AsistenciaDto> ListarOvejasPorGrupo(int idgrupo)

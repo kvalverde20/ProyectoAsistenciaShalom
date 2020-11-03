@@ -97,7 +97,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
                             Apellidos = p.Apellidos,
                             PaisOrigen = p.PaisOrigen,
                             FechaNacimientoTexto = p.FecNacimiento.Value.ToShortDateString(),
-                            NombreCompletoAcompanador = p.NombreCompletoAcompanador,
+                            NombreCompletoAcompanador = p.NombreCompletoAcompanador == null ? "" : p.NombreCompletoAcompanador,
                             Correo = p.Correo,
                             Telefono = p.Telefono,
                             MinisterioTexto = mi.Nombre,

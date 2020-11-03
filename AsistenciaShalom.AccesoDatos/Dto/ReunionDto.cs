@@ -18,8 +18,13 @@ namespace AsistenciaShalom.AccesoDatos.Dto
         public DateTime? FechaReunion { get; set; }
 
 
+        [Required(ErrorMessage = "El Tipo de Reunión es obligatorio")]
         [Display(Name = "Tipo Reunión")]
         public string TipoReunion { get; set; }
+
+
+        [Display(Name = "Tipo Reunión")]
+        public string TipoReunionTexto { get; set; }  
 
         [Display(Name = "Tema Formación")]
         public string TemaFormacion { get; set; }

@@ -84,6 +84,7 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 			$('#table').DataTable(
 				{
 					"order": [[3, "desc"]],
+					"ordering": false,
 					"language": {
 						"emptyTable": "No hay registros",
 						"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
@@ -120,6 +121,7 @@ function pintarTableReuniones(url, campos, propiedadId, nombreController, id = "
 			$('#' + idTabla).DataTable(
 				{
 					"order": [[3, "desc"]],
+					"ordering": false,
 					"language": {
 						"emptyTable": "No hay registros",
 						"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",

@@ -9,6 +9,7 @@ namespace AsistenciaShalom.AccesoDatos.Data.IRepositorio
     public interface IReunionRepositorio : IRepositorio<Reunion>
     {
         IEnumerable<ReunionDto> GetReunionesTotales();
+        ReunionDto GetReunionPorId(int idReunion);
         IEnumerable<ReunionDto> GetReunionesPorGrupo(int? idGrupo);
         IEnumerable<AsistenciaDto> ListarOvejasPorGrupo(int idgrupo);
         IEnumerable<AsistenciaDto> ListarAsistenciasPorReunion(int idReunion);

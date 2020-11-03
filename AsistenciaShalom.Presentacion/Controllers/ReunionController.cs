@@ -67,6 +67,10 @@ namespace AsistenciaShalom.Presentacion.Controllers
             var listaGrupo = new Generico(_contenedorTrabajo, _mapper).CargarComboGrupoEntidad();
             ViewBag.listaGrupo = listaGrupo;
             //------------------------------------------------------------//
+            //Tipo = Tipo Reunion
+            var tipoReunion = "04";
+            var listaTipoReunion = new Generico(_contenedorTrabajo, _mapper).CargarComboxGrupo(tipoReunion);
+            ViewBag.listaTipoReunion = listaTipoReunion;
 
         }
 
@@ -74,7 +78,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
         [HttpGet]
         public IActionResult Agregar()
         {
-
+            CargaComboGrupos();
             return View();
         }
 
@@ -84,6 +88,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
         {
             try
             {
+                CargaComboGrupos();
                 if (ModelState.IsValid)
                 {
                     using (var transaccion = new TransactionScope())
@@ -97,7 +102,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
                             var idGrupoFase = _contenedorTrabajo.Asignacion.GetAsignacionPorPersona(idPersona).IdGrupoFase.GetValueOrDefault();
 
                             reunionDto.IdGrupoFase = idGrupoFase;
-                            reunionDto.TipoReunion = reunionDto.TipoReunion == null ? "" : reunionDto.TipoReunion;
+                            //reunionDto.TipoReunion = reunionDto.TipoReunion == null ? "" : reunionDto.TipoReunion;
                             reunionDto.TemaFormacion = reunionDto.TemaFormacion == null ? "" : reunionDto.TemaFormacion;
                             reunionDto.RhemaOracion = reunionDto.RhemaOracion == null ? "" : reunionDto.RhemaOracion;
                             reunionDto.Predicador = reunionDto.Predicador == null ? "" : reunionDto.Predicador;
@@ -111,7 +116,8 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
                             // Crear las asistencias por asignaciones
 
-                            var newIdreunion = _contenedorTrabajo.Reunion.GetAll(null, q => q.OrderByDescending(s => s.IdReunion), null).FirstOrDefault().IdReunion;
+                            //var newIdreunion = _contenedorTrabajo.Reunion.GetAll(null, q => q.OrderByDescending(s => s.IdReunion), null).FirstOrDefault().IdReunion;
+                            var newIdreunion = entidad.IdReunion;
                             var grupofase = _contenedorTrabajo.GrupoFase.Get(idGrupoFase);
                             var idGrupo = grupofase.IdGrupo;
                             var ListaAsignaciones = _contenedorTrabajo.Asignacion.ListarAsignacionesOvejasPorGrupo(idGrupo).ToList();
@@ -248,11 +254,12 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
             try
             {
-                var reunion= _contenedorTrabajo.Reunion.Get(id);  // id = idReunion
-                reunionDto = _mapper.Map<ReunionDto>(reunion);
-                reunionDto.FechaReunionTexto = reunion.FechaReunion.Value.ToShortDateString();
+                //var reunion= _contenedorTrabajo.Reunion.Get(id);  // id = idReunion
+                //reunionDto = _mapper.Map<ReunionDto>(reunion);
+                //reunionDto.FechaReunionTexto = reunion.FechaReunion.Value.ToShortDateString();
+                reunionDto = _contenedorTrabajo.Reunion.GetReunionPorId(id);   // id = idReunion
 
-                var listAsistenciasDto = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunionHistorico(id).ToList();  // id = idReunion
+                var listAsistenciasDto = _contenedorTrabajo.Reunion.ListarAsistenciasPorReunionHistorico(id).ToList(); 
                 reunionDto.ListaAsistencias = listAsistenciasDto;
 
             }
@@ -269,6 +276,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
         public IActionResult EditarReunionAsistencia(int id)   // id : IdReunion
         {
             ReunionDto reunionDto = new ReunionDto();
+            CargaComboGrupos();
             try
             {
                 var reunion = _contenedorTrabajo.Reunion.Get(id);
@@ -291,13 +299,15 @@ namespace AsistenciaShalom.Presentacion.Controllers
         {
             try
             {
+                CargaComboGrupos();
                 //--------- Reunion --------------
                 var idreunion = int.Parse(form["hdnIdReunion"]);
                 var reunionActualizar = new Reunion
                 {
                     IdReunion = idreunion,
                     FechaReunion = DateTime.Parse(form["txtFechaReunion"]),
-                    TipoReunion = form["txtTipoReunion"].ToString(),
+                    //TipoReunion = form["txtTipoReunion"].ToString(),
+                    TipoReunion = form["TipoReunion"].ToString(),
                     TemaFormacion = form["txtTemaFormacion"].ToString(),
                     Predicador = form["txtPredicador"].ToString(),
                     RhemaOracion = form["txtRhemaOracion"].ToString(),
