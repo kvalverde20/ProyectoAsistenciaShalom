@@ -52,9 +52,10 @@ window.onload = function () {
 							"next": "Siguiente",
 							"previous": "Anterior"
 						}
-					}
+				},
+				"bPaginate": false   // Se agregó actualiacion para quitar paginacion de la lista de Asistencias
 				}
-			);
+		);
 
 		$(".only-numbers").keydown(function (event) {
 
@@ -86,7 +87,7 @@ function Preloader() {
 
 	setTimeout(function () {
 		$.preloader.stop();
-	}, 2200);
+	}, 1200);
 }
 
 

@@ -41,6 +41,7 @@ namespace AsistenciaShalom.Presentacion.Controllers
             
                 if(ent != null)
                 {
+                    _logger.LogInformation("Ingreso válido al sistema");
                     rpta = true;
                     var usuarioDto = _contenedorTrabajo.Usuario.GetDatosGeneralesXIdUsuario(ent.IdUsuario);
                     var listaMenu = _contenedorTrabajo.Menu.GetListaMenu(usuarioDto.IdRol).ToList();
