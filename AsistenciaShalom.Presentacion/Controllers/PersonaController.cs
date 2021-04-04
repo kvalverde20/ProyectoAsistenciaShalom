@@ -10,6 +10,7 @@ using AsistenciaShalom.Presentacion.Filters;
 using AsistenciaShalom.Presentacion.Generic;
 using AsistenciaShalom.Utilitarios;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,7 +34,6 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
         public IActionResult Index()
         {
-            //Thread.Sleep(3000);
             return View();
         }
 
@@ -177,10 +177,20 @@ namespace AsistenciaShalom.Presentacion.Controllers
 
         public List<PersonaDto> listarPersonas()
         {
-            List<PersonaDto> listaPersonasDto = new List<PersonaDto>();
+            List<PersonaDto> listaPersonasDto;
+            var idrol = int.Parse(HttpContext.Session.GetString("idRol"));
+            var idgrupo = int.Parse(HttpContext.Session.GetString("idGrupo"));
+
             try
             {
-                 listaPersonasDto = _contenedorTrabajo.Persona.GetPersonasActivas().ToList();
+                if (idrol == 1)  // id=1 (Administrador)
+                {
+                    listaPersonasDto = _contenedorTrabajo.Persona.GetPersonasActivas().ToList();
+                }
+                else  // Roles Pastor y núcleo
+                {
+                    listaPersonasDto = _contenedorTrabajo.Persona.GetPersonasActivasPorGrupo(idgrupo).ToList();
+                }                  
             }
             catch (Exception ex)
             {
@@ -188,8 +198,6 @@ namespace AsistenciaShalom.Presentacion.Controllers
             }
             
             return listaPersonasDto;
-            //var personasList = _contenedorTrabajo.Persona.GetAll(x =>  x.Estado == true).ToList();         
-            //var listaPersonasDto = _mapper.Map<List<PersonaDto>>(personasList);
 
         }
 

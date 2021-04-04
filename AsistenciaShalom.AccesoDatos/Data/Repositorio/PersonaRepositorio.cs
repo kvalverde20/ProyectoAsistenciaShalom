@@ -110,6 +110,39 @@ namespace AsistenciaShalom.AccesoDatos.Data.Repositorio
             return lista.AsEnumerable();
         }
 
+
+        public IEnumerable<PersonaDto> GetPersonasActivasPorGrupo(int idgrupo)
+        {
+            var persona = _db.Persona;
+            var comunidad = _db.Comunidad;
+            var ministerio = _db.Ministerio;
+            var asignacion = _db.Asignacion;
+
+            var lista = from p in persona.Where(x => x.Estado == true)
+                        join a in asignacion.Where(x => x.Estado == true && x.Cargo == "0301" && x.IdGrupo == idgrupo) on p.IdPersona equals a.IdPersona  // 0301 = Ovejas
+                        join c in comunidad on p.IdComunidad equals c.IdComunidad
+                        join mi in ministerio on p.IdMinisterio equals mi.IdMinisterio
+                        select new PersonaDto
+                        {
+                            IdPersona = p.IdPersona,
+                            Nombres = p.Nombres,
+                            Apellidos = p.Apellidos,
+                            PaisOrigen = p.PaisOrigen,
+                            FechaNacimientoTexto = p.FecNacimiento.Value.ToShortDateString(),
+                            NombreCompletoAcompanador = p.NombreCompletoAcompanador == null ? "" : p.NombreCompletoAcompanador,
+                            Correo = p.Correo,
+                            Telefono = p.Telefono,
+                            MinisterioTexto = mi.Nombre,
+                            ComunidadTexto = c.Nombre,
+                            Estado = p.Estado.Value,
+                            EstadoAsignacionGrupo = p.EstadoAsignacionGrupo,
+                            NombresCompleto = p.Nombres + " " + p.Apellidos
+                        };
+
+            return lista.AsEnumerable();
+        }
+
+
         public PersonaDto GetPersonaPorId(int? id)
         {
             var persona = _db.Persona;

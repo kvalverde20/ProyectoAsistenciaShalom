@@ -37,7 +37,6 @@ namespace FirstAppNetCore
             services.AddScoped<IContenedorTrabajo, ContenedorTrabajo>();
             services.AddAutoMapper(typeof(AsistenciaShalomMapper));
 
-            //services.AddControllersWithViews();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddHttpContextAccessor();
             services.AddRazorPages();
@@ -52,9 +51,7 @@ namespace FirstAppNetCore
 
             if (env.IsDevelopment())
             {
-                //app.UseExceptionHandler("/Error"); // Added to handle error
                 app.UseStatusCodePagesWithReExecute("/Error/NotFound/{0}");  // Added to handle Page Not Found
-                //app.UseDeveloperExceptionPage();
             }
             else
             {
